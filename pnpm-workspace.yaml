@@ -71,7 +71,8 @@ catalog:
   hono: ^4.13.2
   htl: ^1.0.0
   import-meta-resolve: ^4.2.0
-  jsdom: ^30.0.1
+  # Exact: jsdom 30.1.1 breaks new Blob([Uint8Array]) in the mime.view.* tests ("Cannot read properties of undefined (reading '_buffer')").
+  jsdom: 30.0.1
   lucide-react: ^1.31.0
   radix-ui: ^1.6.7
   react: ^19.2.8
