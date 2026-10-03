@@ -28,7 +28,7 @@
     "@statewalker/shared-commands": "catalog:",
     "@statewalker/shared-registry": "catalog:",
     "@statewalker/shared-slots": "catalog:",
-    "@statewalker/ui.view.react": "workspace:*",
+    "@statewalker/ui.view.react": "workspace:^",
     "@statewalker/workspace.core": "catalog:",
     "react-markdown": "catalog:",
     "remark-gfm": "catalog:",

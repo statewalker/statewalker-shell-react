@@ -27,10 +27,10 @@
   "dependencies": {
     "@json-render/core": "catalog:",
     "@statewalker/render.core": "catalog:",
-    "@statewalker/render.view.react": "workspace:*",
+    "@statewalker/render.view.react": "workspace:^",
     "@statewalker/shared-registry": "catalog:",
     "@statewalker/shared-slots": "catalog:",
-    "@statewalker/shell.view.react": "workspace:*",
+    "@statewalker/shell.view.react": "workspace:^",
     "@statewalker/webapp.browser": "catalog:",
     "@statewalker/workspace.core": "catalog:",
     "zod": "catalog:"

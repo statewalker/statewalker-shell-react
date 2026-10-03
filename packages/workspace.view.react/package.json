@@ -20,9 +20,9 @@
     "format": "biome format --write ."
   },
   "dependencies": {
-    "@statewalker/ui.view.react": "workspace:*",
+    "@statewalker/ui.view.react": "workspace:^",
     "@statewalker/shell.core": "catalog:",
-    "@statewalker/ui.view.shadcn": "workspace:*",
+    "@statewalker/ui.view.shadcn": "workspace:^",
     "@statewalker/shared-commands": "catalog:",
     "@statewalker/shared-registry": "catalog:",
     "@statewalker/shared-slots": "catalog:",
