@@ -22,24 +22,24 @@
   "dependencies": {
     "@statewalker/render.view.react": "workspace:*",
     "@statewalker/ui.view.react": "workspace:*",
-    "@statewalker/render.core": "workspace:*",
-    "@statewalker/shell.core": "workspace:*",
+    "@statewalker/render.core": "catalog:",
+    "@statewalker/shell.core": "catalog:",
     "@statewalker/ui.view.shadcn": "workspace:*",
     "@statewalker/shared-commands": "catalog:",
     "@statewalker/shared-registry": "catalog:",
     "@statewalker/shared-slots": "catalog:",
-    "@statewalker/workspace.core": "workspace:*",
+    "@statewalker/workspace.core": "catalog:",
     "@statewalker/workspace.view.react": "workspace:*",
-    "dockview-react": "6.0.3",
+    "dockview-react": "catalog:",
     "lucide-react": "catalog:"
   },
   "peerDependencies": {
-    "react": ">=18",
-    "react-dom": ">=18"
+    "react": "catalog:peers",
+    "react-dom": "catalog:peers"
   },
   "devDependencies": {
-    "@testing-library/react": "^16.3.2",
-    "@json-render/core": "0.18.0",
+    "@testing-library/react": "catalog:",
+    "@json-render/core": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "react": "catalog:",

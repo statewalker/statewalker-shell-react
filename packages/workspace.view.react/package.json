@@ -21,21 +21,21 @@
   },
   "dependencies": {
     "@statewalker/ui.view.react": "workspace:*",
-    "@statewalker/shell.core": "workspace:*",
+    "@statewalker/shell.core": "catalog:",
     "@statewalker/ui.view.shadcn": "workspace:*",
     "@statewalker/shared-commands": "catalog:",
     "@statewalker/shared-registry": "catalog:",
     "@statewalker/shared-slots": "catalog:",
-    "@statewalker/workspace.core": "workspace:*",
-    "@statewalker/workspace.browser": "workspace:*",
+    "@statewalker/workspace.core": "catalog:",
+    "@statewalker/workspace.browser": "catalog:",
     "lucide-react": "catalog:"
   },
   "peerDependencies": {
-    "react": ">=18",
-    "react-dom": ">=18"
+    "react": "catalog:peers",
+    "react-dom": "catalog:peers"
   },
   "devDependencies": {
-    "@testing-library/react": "^16.3.2",
+    "@testing-library/react": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "react": "catalog:",

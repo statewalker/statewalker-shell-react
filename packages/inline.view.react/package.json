@@ -21,20 +21,20 @@
   },
   "dependencies": {
     "@statewalker/ui.view.react": "workspace:*",
-    "@statewalker/mime.core": "workspace:*",
-    "@statewalker/inline.core": "workspace:*",
+    "@statewalker/mime.core": "catalog:",
+    "@statewalker/inline.core": "catalog:",
     "@statewalker/shared-commands": "catalog:",
     "@statewalker/shared-registry": "catalog:",
     "@statewalker/shared-slots": "catalog:",
-    "@statewalker/workspace.core": "workspace:*",
+    "@statewalker/workspace.core": "catalog:",
     "@statewalker/workspace.view.react": "workspace:*"
   },
   "peerDependencies": {
-    "react": ">=18",
-    "react-dom": ">=18"
+    "react": "catalog:peers",
+    "react-dom": "catalog:peers"
   },
   "devDependencies": {
-    "@testing-library/react": "^16.3.2",
+    "@testing-library/react": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "react": "catalog:",

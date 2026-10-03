@@ -21,23 +21,23 @@
   },
   "dependencies": {
     "@statewalker/ui.view.react": "workspace:*",
-    "@statewalker/shell.core": "workspace:*",
-    "@statewalker/settings.core": "workspace:*",
+    "@statewalker/shell.core": "catalog:",
+    "@statewalker/settings.core": "catalog:",
     "@statewalker/ui.view.shadcn": "workspace:*",
     "@statewalker/shared-commands": "catalog:",
     "@statewalker/shared-registry": "catalog:",
     "@statewalker/shared-slots": "catalog:",
-    "@statewalker/workspace.core": "workspace:*",
+    "@statewalker/workspace.core": "catalog:",
     "@statewalker/workspace.view.react": "workspace:*",
     "lucide-react": "catalog:"
   },
   "peerDependencies": {
-    "react": ">=18",
-    "react-dom": ">=18"
+    "react": "catalog:peers",
+    "react-dom": "catalog:peers"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "6.9.1",
-    "@testing-library/react": "^16.3.2",
+    "@testing-library/jest-dom": "catalog:",
+    "@testing-library/react": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "jsdom": "catalog:",

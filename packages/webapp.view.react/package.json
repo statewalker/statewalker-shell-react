@@ -25,22 +25,22 @@
     "format": "biome format --write ."
   },
   "dependencies": {
-    "@json-render/core": "0.18.0",
-    "@statewalker/render.core": "workspace:*",
+    "@json-render/core": "catalog:",
+    "@statewalker/render.core": "catalog:",
     "@statewalker/render.view.react": "workspace:*",
     "@statewalker/shared-registry": "catalog:",
     "@statewalker/shared-slots": "catalog:",
     "@statewalker/shell.view.react": "workspace:*",
-    "@statewalker/webapp.browser": "workspace:*",
-    "@statewalker/workspace.core": "workspace:*",
+    "@statewalker/webapp.browser": "catalog:",
+    "@statewalker/workspace.core": "catalog:",
     "zod": "catalog:"
   },
   "peerDependencies": {
-    "react": ">=18",
-    "react-dom": ">=18"
+    "react": "catalog:peers",
+    "react-dom": "catalog:peers"
   },
   "devDependencies": {
-    "@testing-library/react": "^16.3.2",
+    "@testing-library/react": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",

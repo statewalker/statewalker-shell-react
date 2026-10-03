@@ -26,31 +26,31 @@
     "format": "biome format --write ."
   },
   "dependencies": {
-    "@json-render/core": "0.18.0",
+    "@json-render/core": "catalog:",
     "@statewalker/render.view.react": "workspace:*",
     "zod": "catalog:",
     "@statewalker/shared-baseclass": "catalog:",
     "@statewalker/shared-commands": "catalog:",
     "@statewalker/shared-registry": "catalog:",
     "@statewalker/ui.view.react": "workspace:*",
-    "@statewalker/shell.core": "workspace:*",
+    "@statewalker/shell.core": "catalog:",
     "@statewalker/shell.view.react": "workspace:*",
-    "@statewalker/explorer.core": "workspace:*",
-    "@statewalker/render.core": "workspace:*",
-    "@statewalker/mime.core": "workspace:*",
+    "@statewalker/explorer.core": "catalog:",
+    "@statewalker/render.core": "catalog:",
+    "@statewalker/mime.core": "catalog:",
     "@statewalker/ui.view.shadcn": "workspace:*",
     "@statewalker/shared-slots": "catalog:",
     "@statewalker/webrun-files": "catalog:",
-    "@statewalker/workspace.core": "workspace:*",
+    "@statewalker/workspace.core": "catalog:",
     "lucide-react": "catalog:"
   },
   "peerDependencies": {
-    "react": ">=18",
-    "react-dom": ">=18"
+    "react": "catalog:peers",
+    "react-dom": "catalog:peers"
   },
   "devDependencies": {
     "@statewalker/webrun-files-mem": "catalog:",
-    "@testing-library/react": "^16.3.2",
+    "@testing-library/react": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "jsdom": "catalog:",

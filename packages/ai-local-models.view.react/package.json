@@ -20,26 +20,26 @@
     "format": "biome format --write ."
   },
   "dependencies": {
-    "@json-render/core": "0.18.0",
-    "@json-render/react": "0.18.0",
-    "@json-render/shadcn": "0.18.0",
-    "@statewalker/ai-local-models.core": "workspace:*",
-    "@statewalker/render.core": "workspace:*",
+    "@json-render/core": "catalog:",
+    "@json-render/react": "catalog:",
+    "@json-render/shadcn": "catalog:",
+    "@statewalker/ai-local-models.core": "catalog:",
+    "@statewalker/render.core": "catalog:",
     "@statewalker/shared-commands": "catalog:",
     "@statewalker/shared-registry": "catalog:",
     "@statewalker/shared-slots": "catalog:",
     "@statewalker/ui.view.react": "workspace:*",
-    "@statewalker/workspace.core": "workspace:*",
+    "@statewalker/workspace.core": "catalog:",
     "react-markdown": "catalog:",
     "remark-gfm": "catalog:",
     "zod": "catalog:"
   },
   "peerDependencies": {
-    "react": ">=18",
-    "react-dom": ">=18"
+    "react": "catalog:peers",
+    "react-dom": "catalog:peers"
   },
   "devDependencies": {
-    "@testing-library/react": "^16.3.2",
+    "@testing-library/react": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "jsdom": "catalog:",

@@ -25,17 +25,17 @@
     "@statewalker/shared-registry": "catalog:",
     "@statewalker/shared-slots": "catalog:",
     "@statewalker/ui.view.shadcn": "workspace:*",
-    "@statewalker/workspace.core": "workspace:*",
-    "@statewalker/workspace.browser": "workspace:*",
-    "@tanstack/react-query": "^5.66.10",
+    "@statewalker/workspace.core": "catalog:",
+    "@statewalker/workspace.browser": "catalog:",
+    "@tanstack/react-query": "catalog:",
     "lucide-react": "catalog:"
   },
   "peerDependencies": {
-    "react": ">=18",
-    "react-dom": ">=18"
+    "react": "catalog:peers",
+    "react-dom": "catalog:peers"
   },
   "devDependencies": {
-    "@testing-library/react": "^16.3.2",
+    "@testing-library/react": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "react": "catalog:",

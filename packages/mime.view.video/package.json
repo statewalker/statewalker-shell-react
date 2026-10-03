@@ -20,26 +20,26 @@
     "format": "biome format --write ."
   },
   "dependencies": {
-    "@json-render/core": "0.18.0",
+    "@json-render/core": "catalog:",
     "@statewalker/render.view.react": "workspace:*",
     "@statewalker/ui.view.react": "workspace:*",
     "@statewalker/shell.view.react": "workspace:*",
-    "@statewalker/render.core": "workspace:*",
-    "@statewalker/mime.core": "workspace:*",
+    "@statewalker/render.core": "catalog:",
+    "@statewalker/mime.core": "catalog:",
     "@statewalker/shared-commands": "catalog:",
     "@statewalker/shared-slots": "catalog:",
     "@statewalker/shared-registry": "catalog:",
-    "@statewalker/workspace.core": "workspace:*",
+    "@statewalker/workspace.core": "catalog:",
     "@statewalker/workspace.view.react": "workspace:*",
     "lucide-react": "catalog:",
     "zod": "catalog:"
   },
   "peerDependencies": {
-    "react": ">=18",
-    "react-dom": ">=18"
+    "react": "catalog:peers",
+    "react-dom": "catalog:peers"
   },
   "devDependencies": {
-    "@testing-library/react": "^16.3.2",
+    "@testing-library/react": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "react": "catalog:",
