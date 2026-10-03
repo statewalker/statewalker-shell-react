@@ -23,9 +23,10 @@ catalog:
   "@statewalker/vcs-store-files": ^0.1.1
   "@statewalker/vcs-core": ^0.1.1
   "@statewalker/vcs-commands": ^0.1.1
-  "@statewalker/webrun-site-builder": ^0.1.1
+  "@statewalker/webrun-site-builder": ^0.2.0
   "@statewalker/webrun-modules": ^0.2.1
-  "@statewalker/webrun-site-host": ^0.1.1
+  # 0.1.7 and 0.2.0 on npm leak catalog:/workspace: specifiers and cannot install; 0.2.1 is clean.
+  "@statewalker/webrun-site-host": ^0.2.1
   "@statewalker/shared-ids": ^0.1.0
   "@statewalker/shared-slots": ^0.2.0
   "@statewalker/shared-commands": ^0.2.0
