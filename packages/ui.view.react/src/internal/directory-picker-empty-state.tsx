@@ -1,6 +1,4 @@
 import { Commands } from "@statewalker/shared-commands";
-import { useAdapter } from "./use-adapter.js";
-import { useAdapterValue } from "./use-adapter-value.js";
 import {
   Button,
   Card,
@@ -16,6 +14,8 @@ import {
 } from "@statewalker/workspace.browser";
 import { FolderOpen } from "lucide-react";
 import { type ReactElement, useState } from "react";
+import { useAdapter } from "./use-adapter.js";
+import { useAdapterValue } from "./use-adapter-value.js";
 
 /**
  * Full-screen empty/onboarding view rendered by `<App/>` whenever

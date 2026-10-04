@@ -10,11 +10,7 @@
 // require at mount. A minimal stub is installed so MainShell renders at all —
 // this is test-env setup, not mocking the component under test.
 import { Slots } from "@statewalker/shared-slots";
-import {
-  dockHeaderItemsSlot,
-  dockOverlaysSlot,
-  dockSidePanelsSlot,
-} from "@statewalker/shell.core";
+import { dockHeaderItemsSlot, dockOverlaysSlot, dockSidePanelsSlot } from "@statewalker/shell.core";
 import {
   AppWorkspaceProvider,
   coreViewsSlot,

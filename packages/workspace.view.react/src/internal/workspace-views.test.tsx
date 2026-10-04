@@ -95,9 +95,7 @@ describe("ReconnectBanner", () => {
     const { shell, mount } = setup({ status: "ready", label: "open" });
     const utils = mount(<ReconnectBanner />);
     expect(utils.container.firstChild).toBeNull();
-    act(() =>
-      shell._setState({ status: "needs-permission", label: "reconnect-me" }),
-    );
+    act(() => shell._setState({ status: "needs-permission", label: "reconnect-me" }));
     expect(utils.getByText("reconnect-me")).toBeTruthy();
   });
 

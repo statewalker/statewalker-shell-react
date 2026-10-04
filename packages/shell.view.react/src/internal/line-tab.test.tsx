@@ -29,9 +29,7 @@ function fakeApi(over: { id: string; title?: string; isActive?: boolean }) {
 }
 
 function mount(ws: Workspace, ui: ReactElement) {
-  return render(
-    <AppWorkspaceProvider workspace={ws}>{ui}</AppWorkspaceProvider>,
-  );
+  return render(<AppWorkspaceProvider workspace={ws}>{ui}</AppWorkspaceProvider>);
 }
 
 describe("LineTab", () => {

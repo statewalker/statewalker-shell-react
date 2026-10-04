@@ -23,13 +23,17 @@ describe("FilesListView", () => {
 
   it("re-renders when the model notifies", () => {
     const model = new FilesListModel();
-    model.entries = [{ name: "first.txt", path: "/first.txt", kind: "file", size: 0, lastModified: 0 }];
+    model.entries = [
+      { name: "first.txt", path: "/first.txt", kind: "file", size: 0, lastModified: 0 },
+    ];
     render(<FilesListView model={model} panelId="left" onOpen={() => {}} />);
 
     expect(screen.queryByText("second.txt")).toBeNull();
 
     act(() => {
-      model.entries = [{ name: "second.txt", path: "/second.txt", kind: "file", size: 0, lastModified: 0 }];
+      model.entries = [
+        { name: "second.txt", path: "/second.txt", kind: "file", size: 0, lastModified: 0 },
+      ];
       model.notify();
     });
 

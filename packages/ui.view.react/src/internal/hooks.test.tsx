@@ -4,10 +4,7 @@ import { Workspace } from "@statewalker/workspace.core";
 import { act, render, renderHook } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { describe, expect, it } from "vitest";
-import {
-  AppWorkspaceProvider,
-  useAppWorkspace,
-} from "./app-workspace-provider.js";
+import { AppWorkspaceProvider, useAppWorkspace } from "./app-workspace-provider.js";
 import { useAdapter } from "./use-adapter.js";
 import { useAdapterValue } from "./use-adapter-value.js";
 import { useSlot } from "./use-slot.js";
@@ -74,24 +71,18 @@ describe("useAdapterValue", () => {
     const ws = new Workspace();
     const counter = ws.requireAdapter(CounterAdapter);
     counter.count = 7;
-    const { result } = renderHook(
-      () => useAdapterValue(CounterAdapter, (c) => c.count),
-      {
-        wrapper: wrapperFor(ws),
-      },
-    );
+    const { result } = renderHook(() => useAdapterValue(CounterAdapter, (c) => c.count), {
+      wrapper: wrapperFor(ws),
+    });
     expect(result.current).toBe(7);
   });
 
   it("re-renders with the new value when the adapter notifies", () => {
     const ws = new Workspace();
     const counter = ws.requireAdapter(CounterAdapter);
-    const { result } = renderHook(
-      () => useAdapterValue(CounterAdapter, (c) => c.count),
-      {
-        wrapper: wrapperFor(ws),
-      },
-    );
+    const { result } = renderHook(() => useAdapterValue(CounterAdapter, (c) => c.count), {
+      wrapper: wrapperFor(ws),
+    });
     expect(result.current).toBe(0);
     act(() => {
       counter.increment();

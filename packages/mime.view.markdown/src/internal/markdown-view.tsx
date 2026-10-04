@@ -1,8 +1,8 @@
-import { Markdown } from "./markdown.js";
 import { Commands } from "@statewalker/shared-commands";
 import { useAppWorkspace } from "@statewalker/ui.view.react";
 import { LoadFileCommand } from "@statewalker/workspace.core";
 import { type ReactElement, useEffect, useState } from "react";
+import { Markdown } from "./markdown.js";
 
 interface MarkdownViewProps {
   uri: string;

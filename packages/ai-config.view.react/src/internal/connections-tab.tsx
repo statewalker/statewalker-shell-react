@@ -1,5 +1,9 @@
 import { createStateStore, type StateStore } from "@json-render/core";
-import { AiConfig, makeConnectionsInitialState, makeConnectionsSpec } from "@statewalker/ai-config.core";
+import {
+  AiConfig,
+  makeConnectionsInitialState,
+  makeConnectionsSpec,
+} from "@statewalker/ai-config.core";
 import { SpecRenderer } from "@statewalker/render.view.react";
 import { useAppWorkspace } from "@statewalker/ui.view.react";
 import { type ReactElement, useEffect, useMemo, useSyncExternalStore } from "react";

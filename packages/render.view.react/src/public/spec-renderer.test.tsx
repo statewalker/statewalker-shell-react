@@ -17,9 +17,7 @@ function buildTextRegistry() {
   } as never);
   const { registry } = defineRegistry(catalog, {
     components: {
-      Text: ({ props }: { props: { text?: string } }) => (
-        <span>{props.text}</span>
-      ),
+      Text: ({ props }: { props: { text?: string } }) => <span>{props.text}</span>,
     },
   } as never);
   return registry;
@@ -46,14 +44,7 @@ describe("SpecRenderer (smoke)", () => {
       root: "t",
       elements: { t: { type: "Text", props: { text: "WITH-OPTS" } } },
     };
-    render(
-      <SpecRenderer
-        spec={spec}
-        registry={registry}
-        store={undefined}
-        handlers={{}}
-      />,
-    );
+    render(<SpecRenderer spec={spec} registry={registry} store={undefined} handlers={{}} />);
     expect(screen.getByText("WITH-OPTS")).toBeTruthy();
   });
 });
