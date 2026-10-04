@@ -6,16 +6,23 @@
   "description": "The sole @json-render/react boundary: <SpecRenderer spec registry> (json-render Renderer + JSONUIProvider) plus defineRegistry/schema re-exports.",
   "license": "MIT",
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
   },
   "files": [
+    "dist",
     "src"
   ],
   "scripts": {
     "test": "vitest run --passWithNoTests",
     "typecheck": "tsc --noEmit",
     "lint": "biome check --write .",
-    "format": "biome format --write ."
+    "format": "biome format --write .",
+    "build": "tsdown"
   },
   "dependencies": {
     "@json-render/core": "catalog:",
@@ -31,6 +38,7 @@
     "@types/react-dom": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
+    "tsdown": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },

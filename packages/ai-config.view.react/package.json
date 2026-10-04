@@ -6,11 +6,22 @@
   "description": "Renderer fragment for the AI connections settings tab: the json-render registry + components (controlled Collapsible, status Tabs, FieldInput), the AiConfig→state bridge, and the AiConfig+Secrets action handlers.",
   "license": "MIT",
   "exports": {
-    ".": "./src/index.ts",
-    "./fragment": "./src/fragment.ts",
+    ".": {
+      "source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./fragment": {
+      "source": "./src/fragment.ts",
+      "types": "./dist/fragment.d.ts",
+      "import": "./dist/fragment.js",
+      "default": "./dist/fragment.js"
+    },
     "./styles": "./src/styles.css"
   },
   "files": [
+    "dist",
     "src"
   ],
   "scripts": {
@@ -18,7 +29,8 @@
     "test:watch": "vitest --passWithNoTests",
     "typecheck": "tsc --noEmit",
     "lint": "biome check --write .",
-    "format": "biome format --write ."
+    "format": "biome format --write .",
+    "build": "tsdown"
   },
   "dependencies": {
     "@json-render/core": "catalog:",
@@ -48,6 +60,7 @@
     "jsdom": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
+    "tsdown": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },
