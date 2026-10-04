@@ -4,6 +4,15 @@
   "private": false,
   "type": "module",
   "description": "Shadcn primitives + cn() helper for the workbench substrate.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/statewalker/statewalker-shell-react.git",
+    "directory": "packages/ui.view.shadcn"
+  },
+  "bugs": {
+    "url": "https://github.com/statewalker/statewalker-shell-react/issues"
+  },
+  "homepage": "https://github.com/statewalker/statewalker-shell-react/tree/main/packages/ui.view.shadcn#readme",
   "license": "MIT",
   "exports": {
     ".": {

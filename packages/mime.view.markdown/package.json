@@ -4,6 +4,15 @@
   "private": false,
   "type": "module",
   "description": "Markdown viewer renderer fragment.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/statewalker/statewalker-shell-react.git",
+    "directory": "packages/mime.view.markdown"
+  },
+  "bugs": {
+    "url": "https://github.com/statewalker/statewalker-shell-react/issues"
+  },
+  "homepage": "https://github.com/statewalker/statewalker-shell-react/tree/main/packages/mime.view.markdown#readme",
   "license": "MIT",
   "exports": {
     ".": {

@@ -4,6 +4,15 @@
   "private": false,
   "type": "module",
   "description": "Settings renderer fragment: dialog, header button.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/statewalker/statewalker-shell-react.git",
+    "directory": "packages/settings.view.react"
+  },
+  "bugs": {
+    "url": "https://github.com/statewalker/statewalker-shell-react/issues"
+  },
+  "homepage": "https://github.com/statewalker/statewalker-shell-react/tree/main/packages/settings.view.react#readme",
   "license": "MIT",
   "exports": {
     ".": {

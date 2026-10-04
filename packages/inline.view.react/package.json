@@ -4,6 +4,15 @@
   "private": false,
   "type": "module",
   "description": "Inline-content renderer fragment.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/statewalker/statewalker-shell-react.git",
+    "directory": "packages/inline.view.react"
+  },
+  "bugs": {
+    "url": "https://github.com/statewalker/statewalker-shell-react/issues"
+  },
+  "homepage": "https://github.com/statewalker/statewalker-shell-react/tree/main/packages/inline.view.react#readme",
   "license": "MIT",
   "exports": {
     ".": {

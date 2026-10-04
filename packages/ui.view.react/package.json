@@ -4,6 +4,15 @@
   "private": false,
   "type": "module",
   "description": "Substrate React fragment: mount, AppRoot, core:views slot, useSlot/useKeyedSlot/useAdapterValue/useAdapter hooks, theme binding.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/statewalker/statewalker-shell-react.git",
+    "directory": "packages/ui.view.react"
+  },
+  "bugs": {
+    "url": "https://github.com/statewalker/statewalker-shell-react/issues"
+  },
+  "homepage": "https://github.com/statewalker/statewalker-shell-react/tree/main/packages/ui.view.react#readme",
   "license": "MIT",
   "exports": {
     ".": {

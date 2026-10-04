@@ -4,6 +4,15 @@
   "private": false,
   "type": "module",
   "description": "Dock renderer fragment: dockview-react host, MainShell, ShellHeader, JsonPanel.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/statewalker/statewalker-shell-react.git",
+    "directory": "packages/shell.view.react"
+  },
+  "bugs": {
+    "url": "https://github.com/statewalker/statewalker-shell-react/issues"
+  },
+  "homepage": "https://github.com/statewalker/statewalker-shell-react/tree/main/packages/shell.view.react#readme",
   "license": "MIT",
   "exports": {
     ".": {
