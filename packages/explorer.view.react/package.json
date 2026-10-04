@@ -1,6 +1,6 @@
 {
   "name": "@statewalker/explorer.view.react",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "private": false,
   "type": "module",
   "description": "File-explorer renderer fragment: tree, list, drag-and-drop, context menu, navigation breadcrumbs, search panel.",

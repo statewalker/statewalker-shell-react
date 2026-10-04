@@ -1,6 +1,6 @@
 {
   "name": "@statewalker/mime.view.image",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "private": false,
   "type": "module",
   "description": "Per-MIME viewer renderer fragment: contributes a MimeRenderer to files:mime-renderers.",

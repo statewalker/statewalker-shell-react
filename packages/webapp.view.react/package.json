@@ -1,6 +1,6 @@
 {
   "name": "@statewalker/webapp.view.react",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "private": false,
   "type": "module",
   "description": "Web-app dock renderer fragment: the <SiteFrame> catalog component (an iframe pointed at the hosted client) registered into the shell's json:catalogs slot for JsonPanel to render.",

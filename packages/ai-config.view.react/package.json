@@ -1,6 +1,6 @@
 {
   "name": "@statewalker/ai-config.view.react",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "private": false,
   "type": "module",
   "description": "Renderer fragment for the AI connections settings tab: the json-render registry + components (controlled Collapsible, status Tabs, FieldInput), the AiConfig→state bridge, and the AiConfig+Secrets action handlers.",
