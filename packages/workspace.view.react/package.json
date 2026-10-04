@@ -4,6 +4,15 @@
   "private": false,
   "type": "module",
   "description": "Workspace-bridge renderer fragment: AppWorkspaceProvider, DirectoryPickerEmptyState, ReconnectBanner, switch-workspace header item.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/statewalker/statewalker-shell-react.git",
+    "directory": "packages/workspace.view.react"
+  },
+  "bugs": {
+    "url": "https://github.com/statewalker/statewalker-shell-react/issues"
+  },
+  "homepage": "https://github.com/statewalker/statewalker-shell-react/tree/main/packages/workspace.view.react#readme",
   "license": "MIT",
   "exports": {
     ".": {

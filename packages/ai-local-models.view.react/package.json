@@ -4,6 +4,15 @@
   "private": false,
   "type": "module",
   "description": "Renderer fragment for the Local Models settings tab. Pairs with @statewalker/ai-local-models.core (logic).",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/statewalker/statewalker-shell-react.git",
+    "directory": "packages/ai-local-models.view.react"
+  },
+  "bugs": {
+    "url": "https://github.com/statewalker/statewalker-shell-react/issues"
+  },
+  "homepage": "https://github.com/statewalker/statewalker-shell-react/tree/main/packages/ai-local-models.view.react#readme",
   "license": "MIT",
   "exports": {
     ".": {

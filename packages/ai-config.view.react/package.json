@@ -4,6 +4,15 @@
   "private": false,
   "type": "module",
   "description": "Renderer fragment for the AI connections settings tab: the json-render registry + components (controlled Collapsible, status Tabs, FieldInput), the AiConfig→state bridge, and the AiConfig+Secrets action handlers.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/statewalker/statewalker-shell-react.git",
+    "directory": "packages/ai-config.view.react"
+  },
+  "bugs": {
+    "url": "https://github.com/statewalker/statewalker-shell-react/issues"
+  },
+  "homepage": "https://github.com/statewalker/statewalker-shell-react/tree/main/packages/ai-config.view.react#readme",
   "license": "MIT",
   "exports": {
     ".": {
