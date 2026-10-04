@@ -127,7 +127,7 @@ describe("SwitchWorkspaceButton", () => {
     });
     commands.listen(ChangeWorkspaceCommand, (cmd) => {
       order.push("change");
-      cmd.resolve({});
+      cmd.resolve({ workspace: new Workspace() });
       return true;
     });
     const utils = mount(<SwitchWorkspaceButton />);

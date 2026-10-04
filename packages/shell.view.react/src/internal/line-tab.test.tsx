@@ -9,6 +9,7 @@ import { ClosePanelCommand } from "@statewalker/shell.core";
 import { AppWorkspaceProvider } from "@statewalker/ui.view.react";
 import { Workspace } from "@statewalker/workspace.core";
 import { cleanup, fireEvent, render } from "@testing-library/react";
+import type { IDockviewPanelHeaderProps } from "dockview-react";
 import type { ReactElement } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { dockTabIconSlot } from "../public/extension-points.js";
@@ -18,6 +19,11 @@ afterEach(cleanup);
 
 // Minimal stand-in for the dockview panel api LineTab reads. title/isActive
 // are static here; the subscription methods return a no-op disposable.
+/** Header props around a minimal api stand-in (LineTab only reads `api`). */
+function headerProps(api: unknown): IDockviewPanelHeaderProps {
+  return { api, containerApi: {}, params: {} } as unknown as IDockviewPanelHeaderProps;
+}
+
 function fakeApi(over: { id: string; title?: string; isActive?: boolean }) {
   return {
     id: over.id,
@@ -37,19 +43,14 @@ describe("LineTab", () => {
     const ws = new Workspace();
     const utils = mount(
       ws,
-      // biome-ignore lint/suspicious/noExplicitAny: minimal api stand-in
-      <LineTab api={fakeApi({ id: "p:1", title: "My Session" }) as any} />,
+      <LineTab {...headerProps(fakeApi({ id: "p:1", title: "My Session" }))} />,
     );
     expect(utils.getByText("My Session")).toBeTruthy();
   });
 
   it("falls back to 'Untitled' when the title is empty", () => {
     const ws = new Workspace();
-    const utils = mount(
-      ws,
-      // biome-ignore lint/suspicious/noExplicitAny: minimal api stand-in
-      <LineTab api={fakeApi({ id: "p:1", title: "" }) as any} />,
-    );
+    const utils = mount(ws, <LineTab {...headerProps(fakeApi({ id: "p:1", title: "" }))} />);
     expect(utils.getByText("Untitled")).toBeTruthy();
   });
 
@@ -59,14 +60,10 @@ describe("LineTab", () => {
     const closed = vi.fn();
     commands.listen(ClosePanelCommand, (cmd) => {
       closed(cmd.payload);
-      cmd.resolve({});
+      cmd.resolve();
       return true;
     });
-    const utils = mount(
-      ws,
-      // biome-ignore lint/suspicious/noExplicitAny: minimal api stand-in
-      <LineTab api={fakeApi({ id: "chat:42" }) as any} />,
-    );
+    const utils = mount(ws, <LineTab {...headerProps(fakeApi({ id: "chat:42" }))} />);
     fireEvent.click(utils.getByRole("button", { name: /close tab/i }));
     expect(closed).toHaveBeenCalledTimes(1);
     expect(closed).toHaveBeenCalledWith({ panelId: "chat:42" });
@@ -88,8 +85,7 @@ describe("LineTab", () => {
     });
     const utils = mount(
       ws,
-      // biome-ignore lint/suspicious/noExplicitAny: minimal api stand-in
-      <LineTab api={fakeApi({ id: "chat:agent:7", title: "A" }) as any} />,
+      <LineTab {...headerProps(fakeApi({ id: "chat:agent:7", title: "A" }))} />,
     );
     expect(utils.queryByTestId("icon-specific")).not.toBeNull();
     expect(utils.queryByTestId("icon-broad")).toBeNull();
@@ -102,11 +98,7 @@ describe("LineTab", () => {
       panelIdPrefix: "pdf:",
       Icon: () => <svg data-testid="icon-pdf" />,
     });
-    const utils = mount(
-      ws,
-      // biome-ignore lint/suspicious/noExplicitAny: minimal api stand-in
-      <LineTab api={fakeApi({ id: "chat:1", title: "A" }) as any} />,
-    );
+    const utils = mount(ws, <LineTab {...headerProps(fakeApi({ id: "chat:1", title: "A" }))} />);
     expect(utils.queryByTestId("icon-pdf")).toBeNull();
   });
 });

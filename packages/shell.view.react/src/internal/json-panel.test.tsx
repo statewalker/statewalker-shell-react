@@ -48,7 +48,7 @@ describe("JsonPanel", () => {
     const closed = vi.fn();
     commands.listen(ClosePanelCommand, (cmd) => {
       closed(cmd.payload);
-      cmd.resolve({});
+      cmd.resolve();
       return true;
     });
     const utils = mount(

@@ -17,6 +17,8 @@ class CounterAdapter extends BaseClass {
     this.count += 1;
     this.notify();
   }
+  // Adapters are WorkspaceAdapter (an all-optional, "weak" type): share a member with it.
+  close(): void {}
 }
 
 function wrapperFor(ws: Workspace) {
