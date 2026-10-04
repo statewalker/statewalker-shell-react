@@ -27,10 +27,10 @@ describe("shadcn primitive wrappers (third-party)", () => {
   it("Button asChild renders its child as the root", () => {
     const { getByText } = render(
       <Button asChild>
-        <a href="/x">link</a>
+        <a href="/x">Open the docs</a>
       </Button>,
     );
-    const el = getByText("link");
+    const el = getByText("Open the docs");
     expect(el.tagName).toBe("A");
   });
 

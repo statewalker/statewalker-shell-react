@@ -25,9 +25,7 @@ function buildTextRegistry() {
   } as never);
   const { registry } = defineRegistry(catalog, {
     components: {
-      Text: ({ props }: { props: { text?: string } }) => (
-        <span>{props.text}</span>
-      ),
+      Text: ({ props }: { props: { text?: string } }) => <span>{props.text}</span>,
     },
   } as never);
   return registry;
@@ -40,9 +38,7 @@ function fakeProps(specId: string, panelId = "panel:1") {
 }
 
 function mount(ws: Workspace, ui: ReactElement) {
-  return render(
-    <AppWorkspaceProvider workspace={ws}>{ui}</AppWorkspaceProvider>,
-  );
+  return render(<AppWorkspaceProvider workspace={ws}>{ui}</AppWorkspaceProvider>);
 }
 
 describe("JsonPanel", () => {
@@ -52,7 +48,7 @@ describe("JsonPanel", () => {
     const closed = vi.fn();
     commands.listen(ClosePanelCommand, (cmd) => {
       closed(cmd.payload);
-      cmd.resolve({});
+      cmd.resolve();
       return true;
     });
     const utils = mount(

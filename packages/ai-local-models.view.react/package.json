@@ -1,50 +1,63 @@
 {
   "name": "@statewalker/ai-local-models.view.react",
-  "version": "0.1.1",
+  "version": "0.2.1",
   "private": false,
   "type": "module",
   "description": "Renderer fragment for the Local Models settings tab. Pairs with @statewalker/ai-local-models.core (logic).",
   "license": "MIT",
   "exports": {
-    ".": "./src/index.ts",
-    "./fragment": "./src/fragment.ts",
+    ".": {
+      "source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./fragment": {
+      "source": "./src/fragment.ts",
+      "types": "./dist/fragment.d.ts",
+      "import": "./dist/fragment.js",
+      "default": "./dist/fragment.js"
+    },
     "./styles": "./src/styles.css"
   },
   "files": [
+    "dist",
     "src"
   ],
   "scripts": {
     "test": "vitest run --passWithNoTests",
     "typecheck": "tsc --noEmit",
     "lint": "biome check --write .",
-    "format": "biome format --write ."
+    "format": "biome format --write .",
+    "build": "tsdown"
   },
   "dependencies": {
-    "@json-render/core": "0.18.0",
-    "@json-render/react": "0.18.0",
-    "@json-render/shadcn": "0.18.0",
-    "@statewalker/ai-local-models.core": "workspace:*",
-    "@statewalker/render.core": "workspace:*",
+    "@json-render/core": "catalog:",
+    "@json-render/react": "catalog:",
+    "@json-render/shadcn": "catalog:",
+    "@statewalker/ai-local-models.core": "catalog:",
+    "@statewalker/render.core": "catalog:",
     "@statewalker/shared-commands": "catalog:",
     "@statewalker/shared-registry": "catalog:",
     "@statewalker/shared-slots": "catalog:",
-    "@statewalker/ui.view.react": "workspace:*",
-    "@statewalker/workspace.core": "workspace:*",
+    "@statewalker/ui.view.react": "workspace:^",
+    "@statewalker/workspace.core": "catalog:",
     "react-markdown": "catalog:",
     "remark-gfm": "catalog:",
     "zod": "catalog:"
   },
   "peerDependencies": {
-    "react": ">=18",
-    "react-dom": ">=18"
+    "react": "catalog:peers",
+    "react-dom": "catalog:peers"
   },
   "devDependencies": {
-    "@testing-library/react": "^16.3.2",
+    "@testing-library/react": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "jsdom": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
+    "tsdown": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },

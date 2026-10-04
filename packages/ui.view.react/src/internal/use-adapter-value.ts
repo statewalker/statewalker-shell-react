@@ -1,6 +1,6 @@
-import { useAdapter } from "@statewalker/ui.view.react";
 import type { AdapterCtor, WorkspaceAdapter } from "@statewalker/workspace.core";
 import { useSyncExternalStore } from "react";
+import { useAdapter } from "./use-adapter.js";
 
 /**
  * The minimal shape an adapter must expose to participate in

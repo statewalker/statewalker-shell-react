@@ -1,10 +1,10 @@
-import { AppWorkspaceProvider } from "@statewalker/ui.view.react";
 import type { Workspace } from "@statewalker/workspace.core";
 import type { QueryClient } from "@tanstack/react-query";
 import { QueryClientProvider } from "@tanstack/react-query";
 import type { ReactElement } from "react";
 import { StrictMode } from "react";
 import { App } from "./app.js";
+import { AppWorkspaceProvider } from "./app-workspace-provider.js";
 
 interface AppRootProps {
   workspace: Workspace;

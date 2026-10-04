@@ -1,16 +1,27 @@
 {
   "name": "@statewalker/ai-config.view.react",
-  "version": "0.1.1",
+  "version": "0.2.1",
   "private": false,
   "type": "module",
   "description": "Renderer fragment for the AI connections settings tab: the json-render registry + components (controlled Collapsible, status Tabs, FieldInput), the AiConfig→state bridge, and the AiConfig+Secrets action handlers.",
   "license": "MIT",
   "exports": {
-    ".": "./src/index.ts",
-    "./fragment": "./src/fragment.ts",
+    ".": {
+      "source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./fragment": {
+      "source": "./src/fragment.ts",
+      "types": "./dist/fragment.d.ts",
+      "import": "./dist/fragment.js",
+      "default": "./dist/fragment.js"
+    },
     "./styles": "./src/styles.css"
   },
   "files": [
+    "dist",
     "src"
   ],
   "scripts": {
@@ -18,36 +29,38 @@
     "test:watch": "vitest --passWithNoTests",
     "typecheck": "tsc --noEmit",
     "lint": "biome check --write .",
-    "format": "biome format --write ."
+    "format": "biome format --write .",
+    "build": "tsdown"
   },
   "dependencies": {
-    "@json-render/core": "0.18.0",
-    "@json-render/shadcn": "0.18.0",
-    "@statewalker/ai-config.core": "workspace:*",
-    "@statewalker/render.core": "workspace:*",
-    "@statewalker/render.view.react": "workspace:*",
-    "@statewalker/settings.core": "workspace:*",
+    "@json-render/core": "catalog:",
+    "@json-render/shadcn": "catalog:",
+    "@statewalker/ai-config.core": "catalog:",
+    "@statewalker/render.core": "catalog:",
+    "@statewalker/render.view.react": "workspace:^",
+    "@statewalker/settings.core": "catalog:",
     "@statewalker/shared-commands": "catalog:",
     "@statewalker/shared-registry": "catalog:",
     "@statewalker/shared-slots": "catalog:",
-    "@statewalker/ui.view.react": "workspace:*",
-    "@statewalker/ui.view.shadcn": "workspace:*",
-    "@statewalker/workspace.core": "workspace:*",
+    "@statewalker/ui.view.react": "workspace:^",
+    "@statewalker/ui.view.shadcn": "workspace:^",
+    "@statewalker/workspace.core": "catalog:",
     "lucide-react": "catalog:",
     "zod": "catalog:"
   },
   "peerDependencies": {
-    "react": ">=18",
-    "react-dom": ">=18"
+    "react": "catalog:peers",
+    "react-dom": "catalog:peers"
   },
   "devDependencies": {
     "@statewalker/webrun-files-mem": "catalog:",
-    "@testing-library/react": "^16.3.2",
+    "@testing-library/react": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "jsdom": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
+    "tsdown": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },

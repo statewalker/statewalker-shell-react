@@ -1,8 +1,8 @@
 import { Slots } from "@statewalker/shared-slots";
 import { WorkspaceShellAdapter } from "@statewalker/workspace.browser";
-import { DirectoryPickerEmptyState } from "./directory-picker-empty-state.js";
 import type { ReactElement } from "react";
 import { coreViewsSlot, SHELL_ROOT_VIEW_KEY } from "../public/extension-points.js";
+import { DirectoryPickerEmptyState } from "./directory-picker-empty-state.js";
 import { useAdapter } from "./use-adapter.js";
 import { useAdapterValue } from "./use-adapter-value.js";
 import { useKeyedSlot } from "./use-slot.js";

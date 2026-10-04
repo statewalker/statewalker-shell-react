@@ -6,12 +6,8 @@ import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
 import { CodeBlock, CodeBlockCode } from "./code-block";
 
-type PluggableList = NonNullable<
-  ComponentProps<typeof ReactMarkdown>["remarkPlugins"]
->;
-type UrlTransform = NonNullable<
-  ComponentProps<typeof ReactMarkdown>["urlTransform"]
->;
+type PluggableList = NonNullable<ComponentProps<typeof ReactMarkdown>["remarkPlugins"]>;
+type UrlTransform = NonNullable<ComponentProps<typeof ReactMarkdown>["urlTransform"]>;
 
 export type MarkdownProps = {
   children: string;
@@ -44,10 +40,7 @@ const INITIAL_COMPONENTS: Partial<Components> = {
     if (isInline) {
       return (
         <span
-          className={cn(
-            "bg-primary-foreground rounded-sm px-1 font-mono text-sm",
-            className,
-          )}
+          className={cn("bg-primary-foreground rounded-sm px-1 font-mono text-sm", className)}
           {...props}
         >
           {children}

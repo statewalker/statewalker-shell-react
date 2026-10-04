@@ -1,5 +1,9 @@
 import type { StateStore } from "@json-render/core";
-import { type AiConfig, applyDefaultStarred, type ConnectionType } from "@statewalker/ai-config.core";
+import {
+  type AiConfig,
+  applyDefaultStarred,
+  type ConnectionType,
+} from "@statewalker/ai-config.core";
 
 type Handler = (params: Record<string, unknown>) => Promise<void>;
 

@@ -9,11 +9,7 @@ describe("compareByOrderAndId", () => {
       { id: "a", order: 10 },
       { id: "c", order: 20 },
     ];
-    expect([...items].sort(compareByOrderAndId).map((i) => i.id)).toEqual([
-      "a",
-      "c",
-      "b",
-    ]);
+    expect([...items].sort(compareByOrderAndId).map((i) => i.id)).toEqual(["a", "c", "b"]);
   });
 
   it("defaults a missing `order` to 100", () => {
@@ -21,9 +17,7 @@ describe("compareByOrderAndId", () => {
     const explicit50: OrderedById = { id: "y", order: 50 };
     const explicit150: OrderedById = { id: "z", order: 150 };
     expect(
-      [explicit150, withDefault, explicit50]
-        .sort(compareByOrderAndId)
-        .map((i) => i.id),
+      [explicit150, withDefault, explicit50].sort(compareByOrderAndId).map((i) => i.id),
     ).toEqual(["y", "x", "z"]);
   });
 
@@ -41,16 +35,10 @@ describe("compareByOrderAndId", () => {
   });
 
   it("returns a negative/positive/zero sign consistent with the contract", () => {
-    expect(
-      compareByOrderAndId({ id: "a", order: 1 }, { id: "b", order: 2 }),
-    ).toBeLessThan(0);
-    expect(
-      compareByOrderAndId({ id: "b", order: 2 }, { id: "a", order: 1 }),
-    ).toBeGreaterThan(0);
+    expect(compareByOrderAndId({ id: "a", order: 1 }, { id: "b", order: 2 })).toBeLessThan(0);
+    expect(compareByOrderAndId({ id: "b", order: 2 }, { id: "a", order: 1 })).toBeGreaterThan(0);
     // equal order + equal id → 0
-    expect(
-      compareByOrderAndId({ id: "a", order: 5 }, { id: "a", order: 5 }),
-    ).toBe(0);
+    expect(compareByOrderAndId({ id: "a", order: 5 }, { id: "a", order: 5 })).toBe(0);
   });
 
   it("prefers `order` over id when they disagree", () => {

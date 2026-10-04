@@ -169,7 +169,7 @@ describe("inline-content-views built-ins", () => {
     const disposeLoad = commands.listen(LoadDirectoryCommand, (command) => {
       loadDir(command.payload);
       command.resolve([
-        { name: "a.md", path: "/docs/a.md", kind: "file" },
+        { name: "a.md", path: "/docs/a.md", kind: "file", size: 0, lastModified: 0 },
         { name: "sub", path: "/docs/sub", kind: "directory" },
       ]);
       return true;

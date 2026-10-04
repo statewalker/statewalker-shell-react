@@ -12,9 +12,7 @@ vi.mock("shiki", () => ({
 }));
 
 function mount(ws: Workspace, ui: ReactElement) {
-  return render(
-    <AppWorkspaceProvider workspace={ws}>{ui}</AppWorkspaceProvider>,
-  );
+  return render(<AppWorkspaceProvider workspace={ws}>{ui}</AppWorkspaceProvider>);
 }
 
 // MarkdownView is a public catalog-bound component; its load/error/uri-strip

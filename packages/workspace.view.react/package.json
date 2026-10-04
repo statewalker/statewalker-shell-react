@@ -1,45 +1,58 @@
 {
   "name": "@statewalker/workspace.view.react",
-  "version": "0.1.1",
+  "version": "0.2.1",
   "private": false,
   "type": "module",
   "description": "Workspace-bridge renderer fragment: AppWorkspaceProvider, DirectoryPickerEmptyState, ReconnectBanner, switch-workspace header item.",
   "license": "MIT",
   "exports": {
-    ".": "./src/index.ts",
-    "./fragment": "./src/fragment.ts",
+    ".": {
+      "source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./fragment": {
+      "source": "./src/fragment.ts",
+      "types": "./dist/fragment.d.ts",
+      "import": "./dist/fragment.js",
+      "default": "./dist/fragment.js"
+    },
     "./styles": "./src/styles.css"
   },
   "files": [
+    "dist",
     "src"
   ],
   "scripts": {
     "test": "vitest run --passWithNoTests",
     "typecheck": "tsc --noEmit",
     "lint": "biome check --write .",
-    "format": "biome format --write ."
+    "format": "biome format --write .",
+    "build": "tsdown"
   },
   "dependencies": {
-    "@statewalker/ui.view.react": "workspace:*",
-    "@statewalker/shell.core": "workspace:*",
-    "@statewalker/ui.view.shadcn": "workspace:*",
+    "@statewalker/ui.view.react": "workspace:^",
+    "@statewalker/shell.core": "catalog:",
+    "@statewalker/ui.view.shadcn": "workspace:^",
     "@statewalker/shared-commands": "catalog:",
     "@statewalker/shared-registry": "catalog:",
     "@statewalker/shared-slots": "catalog:",
-    "@statewalker/workspace.core": "workspace:*",
-    "@statewalker/workspace.browser": "workspace:*",
+    "@statewalker/workspace.core": "catalog:",
+    "@statewalker/workspace.browser": "catalog:",
     "lucide-react": "catalog:"
   },
   "peerDependencies": {
-    "react": ">=18",
-    "react-dom": ">=18"
+    "react": "catalog:peers",
+    "react-dom": "catalog:peers"
   },
   "devDependencies": {
-    "@testing-library/react": "^16.3.2",
+    "@testing-library/react": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
+    "tsdown": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },

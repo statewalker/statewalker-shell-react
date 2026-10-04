@@ -21,16 +21,12 @@ describe("Markdown (public render)", () => {
     );
     expect(container.querySelector("h1")?.textContent).toBe("Title");
     expect(getByText("Hello world").tagName).toBe("P");
-    const items = [...container.querySelectorAll("li")].map(
-      (li) => li.textContent,
-    );
+    const items = [...container.querySelectorAll("li")].map((li) => li.textContent);
     expect(items).toEqual(["one", "two"]);
   });
 
   it("renders a fenced code block with its language class (block branch)", () => {
-    const { container } = render(
-      <Markdown>{"```js\nconst a = 1;\n```"}</Markdown>,
-    );
+    const { container } = render(<Markdown>{"```js\nconst a = 1;\n```"}</Markdown>);
     // extractLanguage feeds the CodeBlock; react-markdown tags the code
     // element `language-js`, which the block wrapper carries.
     const block = container.querySelector(".language-js");
@@ -40,9 +36,7 @@ describe("Markdown (public render)", () => {
   });
 
   it("renders inline code as a styled span, distinct from a code block", () => {
-    const { container } = render(
-      <Markdown>{"text with `inline` code"}</Markdown>,
-    );
+    const { container } = render(<Markdown>{"text with `inline` code"}</Markdown>);
     const span = container.querySelector("span.font-mono");
     expect(span?.textContent).toBe("inline");
     // inline path must NOT produce the block chrome
@@ -50,18 +44,14 @@ describe("Markdown (public render)", () => {
   });
 
   it("classifies a multi-line fenced block as a block, not inline", () => {
-    const { container } = render(
-      <Markdown>{"```\nline1\nline2\n```"}</Markdown>,
-    );
+    const { container } = render(<Markdown>{"```\nline1\nline2\n```"}</Markdown>);
     // no language → plaintext; still the block branch (not-prose chrome)
     expect(container.querySelector(".not-prose")).toBeTruthy();
     expect(container.querySelector("span.font-mono")).toBeNull();
   });
 
   it("applies the `className` prop to the outer wrapper", () => {
-    const { container } = render(
-      <Markdown className="my-markdown">{"hi"}</Markdown>,
-    );
+    const { container } = render(<Markdown className="my-markdown">{"hi"}</Markdown>);
     expect(container.querySelector(".my-markdown")).toBeTruthy();
   });
 
@@ -90,9 +80,7 @@ describe("Markdown (public render)", () => {
   });
 
   it("renders every construct of a multi-block document (parseMarkdownIntoBlocks over many tokens)", () => {
-    const { container } = render(
-      <Markdown>{"# H\n\npara\n\n```js\nx\n```\n\n- item"}</Markdown>,
-    );
+    const { container } = render(<Markdown>{"# H\n\npara\n\n```js\nx\n```\n\n- item"}</Markdown>);
     expect(container.querySelector("h1")).toBeTruthy();
     expect(container.querySelector("p")).toBeTruthy();
     expect(container.querySelector(".language-js")).toBeTruthy();
