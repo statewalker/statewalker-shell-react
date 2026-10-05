@@ -1,6 +1,6 @@
 {
   "name": "@statewalker/mime.view.pdf",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": false,
   "type": "module",
   "description": "Per-MIME viewer renderer fragment: contributes a MimeRenderer to files:mime-renderers.",
