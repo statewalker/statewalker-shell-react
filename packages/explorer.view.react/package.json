@@ -1,6 +1,6 @@
 {
   "name": "@statewalker/explorer.view.react",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": false,
   "type": "module",
   "description": "File-explorer renderer fragment: list view with breadcrumbs, filter and drag-and-drop, dock panel presets, and the file-explorer:new-panel command.",

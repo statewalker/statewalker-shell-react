@@ -1,6 +1,6 @@
 {
   "name": "@statewalker/settings.view.react",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": false,
   "type": "module",
   "description": "Settings renderer fragment: dialog, header button.",
