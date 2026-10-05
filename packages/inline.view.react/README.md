@@ -2,24 +2,21 @@
 
 ## What it is
 
-The React renderer for the inline-content subsystem. It owns the
-`inline-content:renderers` keyed slot (the rendering lookup table), the
-`<InlineContent>` resolver that turns an `InlineContentSpec` into a rendered
-component, and the five built-in inline components — `MetricCard`, `LineChart`,
-`FileCard`, `DirectoryCard`, `ActionButton`. It is the view half of
-`@statewalker/inline.core`, which holds the
-React-free contract.
+React rendering for inline content: small components that a message or
+document embeds by id, such as a metric card or a chart. It provides
+`<InlineContent spec>`, which looks up a component by `spec.componentId` and
+renders it with `spec.props`, the `inline-content:renderers` slot that holds
+those components, and five built-in components: `metric-card`, `line-chart`,
+`file-card`, `directory-card`, `action-button`.
 
 ## Why it exists
 
-Per ADR-0002 the inline-content subsystem is split logic / view. This package is
-the view: the rendering slot is React-typed, so it can't live in the
-framework-neutral logic package. Its init registers each built-in component
-under its id into `inline-content:renderers` (so `<InlineContent>` can resolve
-it) *and* contributes the matching descriptor into the logic-side
-`inline-content:components` slot (so the component is discoverable). Plug-in
-fragments register the same way, so the chat surface sees plug-in components
-indistinguishably from built-ins.
+`@statewalker/inline.core` defines the spec type (`InlineContentSpec`) and the
+`inline-content:components` slot, where components are listed by id and label
+for discovery, with no React. The slot that holds the actual React components
+must be typed with React, so it lives here. The fragment registers each
+built-in in both slots; plug-in components register the same way and are
+rendered exactly like built-ins.
 
 ## How to use
 
@@ -27,24 +24,28 @@ indistinguishably from built-ins.
 pnpm add @statewalker/inline.view.react
 ```
 
-Three entry points:
+Peer dependencies: `react` and `react-dom` (`>=18`).
 
-- `@statewalker/inline.view.react` — `InlineContent`,
-  `inlineContentRenderersSlot`, `InlineContentComponent`.
-- `@statewalker/inline.view.react/fragment` — default-exported
-  `initInlineContentReact(ctx)` renderer-fragment init (registers the five
-  built-ins; returns a `cleanup` thunk).
-- `@statewalker/inline.view.react/styles` — the bundled `styles.css`.
+| Import | Provides |
+| --- | --- |
+| `@statewalker/inline.view.react` | `InlineContent`, `inlineContentRenderersSlot`, `InlineContentComponent`; default export is the fragment init |
+| `@statewalker/inline.view.react/fragment` | Default export: `init(ctx)` that registers the five built-ins; returns a cleanup function |
+| `@statewalker/inline.view.react/styles` | Tailwind v4 `@source` globs |
 
-Peer-depends on `react` / `react-dom` >= 18.
+```ts
+import "@statewalker/inline.view.react/styles";
+import initInlineView from "@statewalker/inline.view.react/fragment";
+
+const cleanup = initInlineView(ctx);
+```
 
 ## Examples
 
-Render a spec (typically one carried in an assistant message):
+### Render a spec
 
 ```tsx
-import { InlineContent } from "@statewalker/inline.view.react";
 import type { InlineContentSpec } from "@statewalker/inline.core";
+import { InlineContent } from "@statewalker/inline.view.react";
 
 const spec: InlineContentSpec = {
   componentId: "line-chart",
@@ -54,85 +55,68 @@ const spec: InlineContentSpec = {
 <InlineContent spec={spec} />;
 ```
 
-Register a plug-in component (same path the built-ins take):
+### Register a plug-in component
 
 ```tsx
-import { inlineContentRenderersSlot, type InlineContentComponent } from "@statewalker/inline.view.react";
 import { inlineComponentSlot } from "@statewalker/inline.core";
+import { type InlineContentComponent, inlineContentRenderersSlot } from "@statewalker/inline.view.react";
 import { Slots } from "@statewalker/shared-slots";
 
-const MyInline: InlineContentComponent = ({ props }) => <div>{String(props)}</div>;
+const Greeting: InlineContentComponent = ({ props }) => <b>{String((props as { name: string }).name)}</b>;
+
 const slots = workspace.requireAdapter(Slots);
-slots.register(inlineContentRenderersSlot, "my-inline", MyInline);
-slots.provide(inlineComponentSlot, { id: "my-inline", label: "My Inline" });
+slots.register(inlineContentRenderersSlot, "greeting", Greeting);
+slots.provide(inlineComponentSlot, { id: "greeting", label: "Greeting" });
 ```
 
-Built-in component ids and their props:
+### Built-in components
 
-| id | props |
+| `componentId` | `props` |
 | --- | --- |
-| `metric-card` | `{ label, value, delta?, trend?: "positive" \| "negative" }` |
-| `line-chart` | `{ values: number[], startLabel?, endLabel?, height? }` |
-| `file-card` | `{ uri, name?, description? }` — click fires `files:visualize` |
-| `directory-card` | `{ uri, name?, entries? }` — lazy-loads via `files:load-directory`; rows fire `files:visualize` |
-| `action-button` | `{ label, command, payload?, variant? }` — click fires the named command |
+| `metric-card` | `{ label: string, value: string \| number, delta?: string, trend?: "positive" \| "negative" }` |
+| `line-chart` | `{ values: number[], startLabel?: string, endLabel?: string, height?: number }` |
+| `file-card` | `{ uri: string, name?: string, description?: string }`; a click calls `files:visualize` |
+| `directory-card` | `{ uri: string, name?: string, entries?: { name, kind: "file" \| "directory" }[] }`; without `entries` it loads one level with `files:load-directory`; a row click calls `files:visualize` |
+| `action-button` | `{ label: string, command: string, payload?: unknown, variant?: "default" \| "primary" \| "destructive" }`; a click calls the command named `command` with `payload` |
 
 ## Internals
 
-### Architectural decisions
+### Bad input is shown, not hidden
 
-- **Two slots, one registration.** `init.ts` walks a `BUILTINS` table and, for
-  each entry, both `register`s the component into `inline-content:renderers` and
-  `provide`s the descriptor into `inline-content:components`. Rendering lookup and
-  discoverability stay in sync.
-- **`<InlineContent>` subscribes to the slot** via `useKeyedSlot`, so a
-  late-registered (plug-in) component renders without a remount.
-- **Unknown ids are visible, not swallowed.** Because a spec's `componentId`
-  usually originates from the agent's structured output (the trust boundary), an
-  unresolved id renders a small inline error chip rather than nothing. Each
-  built-in independently validates its own props and shows the same chip on a
-  shape mismatch.
-- **`InlineContentComponent` is `ComponentType<{ props: unknown }>`.** The slot
-  holds components opaquely; each casts `props` to its concrete shape internally,
-  mirroring the `unknown` props in `InlineContentSpec`.
-- **Components fire commands, not callbacks.** `FileCard` / `DirectoryCard` fire
-  `files:visualize`; `ActionButton` fires an arbitrary command by string key.
-  This keeps one component reusable across many actions with no per-action React
-  bindings, and routes everything through the workspace command bus.
+Specs often come from model output, so ids and props cannot be trusted.
 
-### Algorithms
+- Unknown id: `<InlineContent>` renders `Unknown inline component: <id>`.
+- Props of the wrong shape: the component renders `<Name>: invalid props`
+  (for example `LineChart: invalid props`).
 
-- **`LineChart`** scales a numeric series to a fluid SVG `<polyline>` (min/max
-  normalised over the configured height, x by index) — no charting dependency.
-- **`DirectoryCard`** lazy-loads one level via `files:load-directory` on mount
-  when `entries` is omitted, tracking `loading` / `ready` / `error` state and
-  cancelling on unmount; explicit `entries` skip the load.
+### `action-button` calls any command by name
 
-### Constraints
+The button builds a command declaration from the `command` string at click
+time. A command with no listener does nothing and reports no error. Because
+the command name comes from the spec, any registered command can be triggered
+by content that reaches `<InlineContent>`.
 
-- Peer-depends on React 18+; the host must import `styles.css`.
-- `DirectoryCard` is one level deep — sub-directory rows route through
-  `files:visualize` rather than expanding in place.
-- Command-firing components require the workspace `Commands` adapter (via
-  `useAppWorkspace`).
+### Components added later still render
+
+`<InlineContent>` reads the renderers slot with `useKeyedSlot`, so a component
+registered after the spec is on screen replaces the "Unknown inline component"
+chip without a remount.
+
+### Other details
+
+- `line-chart` draws an SVG `<polyline>` scaled between the min and max values; no chart library.
+- `directory-card` shows one level. Sub-folder rows call `files:visualize`
+  instead of expanding.
 
 ### Dependencies
 
-`@statewalker/inline.core` (spec/descriptor types, `inlineComponentSlot`),
-`@statewalker/ui.view.react` (`useAdapter`, `useKeyedSlot`, `useAppWorkspace`),
-`@statewalker/mime.core` (`VisualizeFileCommand`), `@statewalker/workspace.core`
-(`LoadDirectoryCommand`, `DirectoryEntry`, `getWorkspace`),
-`@statewalker/workspace.view.react`, `shared-commands` (`Commands`),
-`shared-registry`, `shared-slots` (`defineKeyedSlot`, `Slots`).
-
-## Related
-
-- `@statewalker/inline.core` — the paired React-free
-  logic fragment (spec/descriptor contract + discoverability slot); the `.core`
-  ↔ `.view.react` pair.
-- `@statewalker/mime.core` — owns the
-  `files:visualize` command the file/directory cards fire.
+- `@statewalker/inline.core` — `InlineContentSpec`, `inlineComponentSlot`.
+- `@statewalker/mime.core` — `VisualizeFileCommand`.
+- `@statewalker/workspace.core` — `LoadDirectoryCommand`, `getWorkspace`.
+- `@statewalker/ui.view.react` — hooks.
+- `@statewalker/shared-commands`, `@statewalker/shared-slots`, `@statewalker/shared-registry` — command bus and slots.
+- `@statewalker/workspace.view.react` — declared but not imported by the source.
 
 ## License
 
-MIT — see the monorepo root `LICENSE`.
+MIT

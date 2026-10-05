@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "packageManager": "pnpm@10.16.1",
-  "description": "Application shell and fragment platform: backbone-common/server/web + shared-dom/views/react renderers",
+  "description": "React renderers for the statewalker application shell",
   "bugs": {
     "url": "https://github.com/statewalker/statewalker-shell-react/issues"
   },

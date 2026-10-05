@@ -2,21 +2,18 @@
 
 ## What it is
 
-The React renderer fragment for the workbench settings dialog. It provides
-two components — `SettingsButton` (a header trigger that fires
-`settings:open`) and `SettingsDialog` (the modal shell with a tab sidebar) —
-registers both into the `core:views` view registry, and contributes the
-dialog to the shell's `dock:overlays` slot. It renders the state and tabs
-owned by `@statewalker/settings.core`.
+A view fragment for the settings dialog. It provides `SettingsDialog`, a modal
+with a tab list on the left and the active tab's content on the right, and
+`SettingsButton`, which opens it. It renders the open state and tabs held by
+`@statewalker/settings.core`.
 
 ## Why it exists
 
-This is the `.view.react` half of the ADR-0002 split: `settings.core` holds
-the dialog state, commands, and the `settings:tabs` contribution slot with
-no React; this package is the rendering surface. The dialog is a layout
-shell only — each tab's UI belongs to the fragment that contributed it
-(resolved via `ViewRegistry.get(tab.viewKey)`), so this package stays thin
-and unaware of any particular tab's content.
+`@statewalker/settings.core` holds the dialog state (`Settings` adapter), the
+`settings:open` command and the `settings:tabs` slot, with no React. Each tab's
+content belongs to the package that contributed the tab (for example the AI
+"Remote Models" tab). This package only draws the frame and looks up each
+tab's component by its `viewKey`, so it does not depend on any tab.
 
 ## How to use
 
@@ -24,103 +21,98 @@ and unaware of any particular tab's content.
 pnpm add @statewalker/settings.view.react
 ```
 
-Import the styles once at the host app boot (Tailwind v4 content discovery),
-then activate the fragment after `settings.core` and the shell:
+Peer dependencies: `react` and `react-dom` (`>=18`).
+
+| Import | Provides |
+| --- | --- |
+| `@statewalker/settings.view.react` | Only the default export (the fragment init); no named exports |
+| `@statewalker/settings.view.react/fragment` | Default export: `init(ctx)` returning `() => Promise<void>` |
+| `@statewalker/settings.view.react/styles` | Tailwind v4 `@source` globs |
+
+Activate it after the `settings.core` and `shell.core` logic fragments:
 
 ```ts
 import "@statewalker/settings.view.react/styles";
-import initSettingsReact from "@statewalker/settings.view.react/fragment";
+import initSettingsView from "@statewalker/settings.view.react/fragment";
 
-const cleanup = initSettingsReact(ctx);
-// ... later
-await cleanup();
+const cleanup = initSettingsView(ctx);
 ```
 
-The fragment registers:
+The init registers:
 
-- `SettingsButton` into `core:views` under `settings:button`
-- `SettingsDialog` into `core:views` under `settings:dialog`
-- the dialog into `dock:overlays` (so it mounts once at the top of the tree)
+```
+core:views
+  "settings:button"  -> SettingsButton
+  "settings:dialog"  -> SettingsDialog
+dock:overlays
+  { id: "settings:dialog", viewKey: "settings:dialog" }
+```
 
-The package exposes **no public React components** — they are reached
-through `ViewRegistry` / the overlays slot, not imported directly.
+The dialog is mounted once as an overlay. The button is registered as a view
+but not placed anywhere; contribute it to `dock:header-items` (or another
+slot) to show it.
 
 ## Examples
 
-### Opening settings from a header item
+### Add a settings tab
 
-The canonical app shell composes Settings into the System menu rather than
-pinning a top-level button, but the standalone `SettingsButton` view is
-registered for callers that still want a direct trigger. It simply fires
-the command from `settings.core`:
+```ts
+import { settingsTabSlot } from "@statewalker/settings.core";
+import { Slots } from "@statewalker/shared-slots";
+import { coreViewsSlot, type ViewComponent } from "@statewalker/ui.view.react";
 
-```tsx
-// internal — fires OpenSettingsCommand via the Commands adapter
-<Button onClick={() => commands.call(OpenSettingsCommand, { tabId })}>
-  Settings
-</Button>
+const slots = workspace.requireAdapter(Slots);
+slots.register(coreViewsSlot, "myplugin:settings", MySettingsTab as ViewComponent);
+slots.provide(settingsTabSlot, {
+  id: "myplugin",
+  title: "My plugin",
+  viewKey: "myplugin:settings",
+  order: 50,
+});
 ```
 
-### How the dialog resolves tabs
+### Open the dialog on a tab
 
-`SettingsDialog` reads `Settings.isOpen` / `activeTabId`, the
-`settings:tabs` slot (sorted by `order` then `id`), and renders each active
-tab's content via `ViewRegistry.get(tab.viewKey)`:
+```ts
+import { OpenSettingsCommand } from "@statewalker/settings.core";
 
+await commands.call(OpenSettingsCommand, { tabId: "myplugin" }).promise;
 ```
-Settings adapter ──┐
-settings:tabs slot ┼─→ <SettingsDialog>  ─→ <nav> tab list
-core:views registry┘                      └→ ViewRegistry.get(viewKey) → <TabContent>
-```
-
-If a tab is registered but no component is bound to its `viewKey`, the
-dialog renders an inline placeholder noting the missing binding.
 
 ## Internals
 
-### Architectural decisions
+### How the dialog picks what to show
 
-- **Slot/registry-mediated, no public exports.** Components are contributed
-  to `core:views` and `dock:overlays`, never exported, so the host composes
-  them through the shell rather than importing concrete React.
-- **Thin layout shell.** `SettingsDialog` owns only the modal frame and the
-  tab sidebar; tab content is owned by contributing fragments via
-  `viewKey`.
-- **Stable snapshots.** `isOpen` and `activeTabId` are read with separate
-  `useAdapterValue` selectors so `getSnapshot` returns `Object.is`-stable
-  primitives and avoids `useSyncExternalStore` loops; the sorted tab list is
-  `useMemo`'d.
-- **Dialog rendered as an overlay.** Mounted once via `dock:overlays`, not
-  pinned per-button, so a single instance services every trigger.
+```
+Settings adapter (isOpen, activeTabId) --+
+settings:tabs (sorted by order, then id) +--> SettingsDialog --> tab list
+core:views                              --+                 \-> core:views[tab.viewKey]
+```
+
+- `isOpen` false: the dialog renders nothing.
+- `activeTabId` does not match a tab: the first tab is shown.
+- No tabs: `No settings tabs registered.`
+- A tab whose `viewKey` has no component:
+  `Tab "<title>" registered but no component is bound to viewKey "<viewKey>".`
+
+`isOpen` and `activeTabId` are read with two separate `useAdapterValue`
+selectors so each returns a primitive; a selector returning a new object would
+re-render on every notification.
 
 ### Constraints
 
-- Built on `@statewalker/ui.view.shadcn` primitives (`Dialog`, `Button`,
-  `cn`, …) and `lucide-react` icons; the dialog is fixed at `85vh × 90vw`
-  (max `5xl`).
-- Requires `react` / `react-dom` >= 18 (peer dependencies).
+- Fixed size: `85vh` by `90vw`, at most `max-w-5xl`.
+- Uses `Dialog` and `Button` from `@statewalker/ui.view.shadcn`.
 
 ### Dependencies
 
-- `@statewalker/settings.core` — the state, commands, and `settings:tabs`
-  slot this fragment renders.
-- `@statewalker/ui.view.react` — `coreViewsSlot`, `useAdapter`,
-  `useAdapterValue`, `useSlot` / `useKeyedSlot`, `compareByOrderAndId`,
-  `ViewComponent`.
-- `@statewalker/ui.view.shadcn` — dialog / button primitives and `cn`.
-- `@statewalker/shell.core` — `dockOverlaysSlot` for mounting the dialog.
-- `@statewalker/shared-commands`, `@statewalker/shared-registry`,
-  `@statewalker/shared-slots`, `@statewalker/workspace.core` — fragment
-  wiring.
-- `@statewalker/workspace.view.react` — workspace-aware React surfaces.
+- `@statewalker/settings.core` — `Settings`, `OpenSettingsCommand`, `settingsTabSlot`.
+- `@statewalker/shell.core` — `dockOverlaysSlot`.
+- `@statewalker/ui.view.react` — `coreViewsSlot`, hooks, `compareByOrderAndId`.
+- `@statewalker/ui.view.shadcn` — dialog and button.
+- `@statewalker/shared-commands`, `@statewalker/shared-slots`, `@statewalker/shared-registry`, `@statewalker/workspace.core` — fragment wiring.
 - `lucide-react` — the settings icon.
-
-## Related
-
-- `@statewalker/settings.core` — the
-  React-free logic fragment (state, commands, `settings:tabs` slot) this
-  renderer pairs with.
 
 ## License
 
-MIT — see the monorepo root `LICENSE`.
+MIT

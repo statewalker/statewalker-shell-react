@@ -3,7 +3,7 @@
   "version": "0.2.1",
   "private": false,
   "type": "module",
-  "description": "File-explorer renderer fragment: tree, list, drag-and-drop, context menu, navigation breadcrumbs, search panel.",
+  "description": "File-explorer renderer fragment: list view with breadcrumbs, filter and drag-and-drop, dock panel presets, and the file-explorer:new-panel command.",
   "bugs": {
     "url": "https://github.com/statewalker/statewalker-shell-react/issues"
   },

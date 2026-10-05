@@ -2,11 +2,21 @@
 
 ## What it is
 
-The React renderer for the "Remote Models" AI-connections settings tab. It implements the React-free contract published by `@statewalker/ai-config`: the json-render schema-typed catalog and its component bindings (a controlled `Collapsible`, a status-dot `Tabs`, and a bespoke `FieldInput`), the `AiConfig → state` projection bridge, the `AiConfig` + `Secrets` action handlers, and the settings-tab `ViewComponent` itself. Its fragment init registers the tab into the settings dialog and wires the deep-link command.
+The "Remote Models" tab of the settings dialog, where a user adds AI provider
+connections (Anthropic, OpenAI-compatible endpoints and other types defined in
+`@statewalker/ai-config.core`), enters API keys, tests the connection, and
+stars models. The tab is a json-render spec from `@statewalker/ai-config.core`
+rendered with shadcn components; this package supplies the React bindings, the
+action handlers and the bridge that copies `AiConfig` state into the spec's
+state.
 
 ## Why it exists
 
-Per ADR 0002 the logic/view split is the package boundary: the opaque json-render `Spec`, the catalog id, and the allowed component/action name-sets live in the React-free `@statewalker/ai-config`; everything that needs React — the schema-typed `defineCatalog`/`defineRegistry` binding (which pulls in `@json-render/react`'s `schema` via `render.view.react`), the actual React components, the action implementations, and the state bridge — lives here. This keeps `@statewalker/ai-config` portable while giving the host a drop-in settings tab. The two packages agree on the catalog id, component vocabulary, and action vocabulary so the spec and these bindings can be validated against each other.
+`@statewalker/ai-config.core` holds the `AiConfig` adapter, the tab's spec,
+and the allowed component and action names, with no React. Anything that needs
+React or json-render's React schema lives here: the typed catalog, the
+components, the action implementations and the state bridge. The fragment
+plugs the tab into the settings dialog.
 
 ## How to use
 
@@ -14,93 +24,132 @@ Per ADR 0002 the logic/view split is the package boundary: the opaque json-rende
 pnpm add @statewalker/ai-config.view.react
 ```
 
-Register both fragments — the logic fragment first, then this renderer — and import its stylesheet:
+Peer dependencies: `react` and `react-dom` (`>=18`).
+
+| Import | Provides |
+| --- | --- |
+| `@statewalker/ai-config.view.react` | `AiConfigConnectionsTab`, `buildConnectionsRegistry`, `connectionsCatalog`; default export is the fragment init |
+| `@statewalker/ai-config.view.react/fragment` | Default export: `init(ctx)` returning `() => Promise<void>` |
+| `@statewalker/ai-config.view.react/styles` | An empty stylesheet (comments only), kept as a place for tab-specific styles |
+
+Activate the logic fragment first, then this one:
 
 ```ts
-import initAiConfig from "@statewalker/ai-config/fragment";
+import initAiConfig from "@statewalker/ai-config.core/fragment";
 import initAiConfigView from "@statewalker/ai-config.view.react/fragment";
-import "@statewalker/ai-config.view.react/styles";
 
 initAiConfig(ctx);
-initAiConfigView(ctx);
+const cleanup = initAiConfigView(ctx);
 ```
 
-The renderer's init:
+The init:
 
-1. Registers the connections-tab `ViewComponent` into the `core:views` slot under the `ai-config:connections` viewKey.
-2. Contributes the `settings:tabs` entry ("Remote Models", `order: 20`).
-3. Listens for `ConfigureAiCommand` and opens the settings dialog on the tab via `OpenSettingsCommand`.
+1. Registers `AiConfigConnectionsTab` in `core:views` under
+   `AI_CONFIG_CONNECTIONS_TAB_VIEW_KEY`.
+2. Adds a `settings:tabs` entry titled "Remote Models", `order: 20`.
+3. Handles `ConfigureAiCommand` by calling `OpenSettingsCommand` with that tab.
 
 ## Examples
 
-### The settings-tab component (the normal entry point)
+### Open the tab from anywhere
 
-`AiConfigConnectionsTab` is registered for you by the fragment, but it is exported for direct mounting:
+```ts
+import { ConfigureAiCommand } from "@statewalker/ai-config.core";
+
+await commands.call(ConfigureAiCommand, undefined).promise;
+```
+
+### Mount the tab directly
 
 ```tsx
 import { AiConfigConnectionsTab } from "@statewalker/ai-config.view.react";
 
-// Renders inside an AppWorkspace context; resolves AiConfig from the workspace,
-// owns a per-mount json-render StateStore, and renders the spec via SpecRenderer.
-<AiConfigConnectionsTab />;
+<AiConfigConnectionsTab />; // needs an <AppWorkspaceProvider> ancestor and the AiConfig adapter
 ```
 
-### Building the registry directly
+### Build the registry
 
 ```ts
-import {
-  buildConnectionsRegistry,
-  connectionsCatalog,
-} from "@statewalker/ai-config.view.react";
+import { buildConnectionsRegistry, connectionsCatalog } from "@statewalker/ai-config.view.react";
 
-const { registry } = buildConnectionsRegistry({
-  actions: handlers, // a ConnectionsActionHandlers map bound to AiConfig + the store
-});
+const registry = buildConnectionsRegistry({ actions: handlers });
 ```
 
-The `handlers` map is produced internally by `buildActionHandlers({ aiConfig, store })`; `AiConfigConnectionsTab` assembles it for you.
-
-`connectionsCatalog` is the schema-typed catalog: it extends `@json-render/shadcn`'s stock definitions with the panel's three custom components, plus typed params for each of the seven connection actions.
+`buildConnectionsRegistry` returns json-render's `DefineRegistryResult`.
+`handlers` must implement the seven actions: `addConnection`,
+`connectConnection`, `disconnectConnection`, `removeConnection`,
+`toggleModelStar`, `addHeader`, `removeHeader`. The tab builds these
+internally; the function is exported for tests and custom hosts.
+`connectionsCatalog` extends `@json-render/shadcn`'s component definitions
+with the tab's three custom components.
 
 ## Internals
 
-### Architectural decisions
+### One store per mounted tab
 
-- **Per-mount store, mount-scoped handlers.** `AiConfigConnectionsTab` creates one json-render `StateStore` per mount (`makeConnectionsInitialState()`), builds the action handlers closed over `{ aiConfig, store }`, builds the registry, and wires the bridge — all `useMemo`-stable. The component renders the spec through `SpecRenderer`.
-- **The component watches the store from outside json-render's context.** It lives *outside* `SpecRenderer`'s `JSONUIProvider`, so it subscribes to the store directly via `useSyncExternalStore` on `/ui/activeConnectionId` and calls `bridge.sync()` when the active tab changes — there is no json-render state context out there to read.
-- **Three custom catalog components** replace stock shadcn variants the panel needs:
-  - `ControlledCollapsible` — controlled fold via a state `openPath` (`/ui/form/settingsOpen`), so `connectConnection` can collapse the credential form on success and the user can re-expand it. Stock shadcn Collapsible is uncontrolled (`defaultOpen` only).
-  - `StatusTabs` — a connection-aware `Tabs` whose triggers carry a status dot (connected / testing / error / idle) projected by the bridge. Renders only the tab strip; the active body is a sibling gated on `/persistent/active`, not a `TabsContent` child.
-  - `FieldInput` — form input with `autoComplete` set explicitly plus `data-1p-ignore`/`data-lpignore` to suppress browser autofill cross-pollution, and a show/hide eye toggle for the API-key field.
-- **Credentials are write-only in the UI.** The state bridge seeds `/ui/form/apiKey` blank from the domain (it never reads keys back); `connectConnection` flushes it to `Secrets` via `AiConfig.setApiKey`. The key never lands on `/persistent`, on a `Connection`, or in the persisted config.
+`AiConfigConnectionsTab` creates a json-render `StateStore` per mount, builds
+the action handlers over `{ aiConfig, store }`, builds the registry, and
+renders the spec with `SpecRenderer`. It sits outside the
+`<JSONUIProvider>`, so it watches `/ui/activeConnectionId` in the store
+directly and re-syncs the bridge when the selected tab changes.
 
-### Algorithms
+### The state bridge
 
-- **State bridge projection.** `createConnectionsBridge(store, aiConfig)` projects `AiConfig.listConnections()` into `/persistent/{hasConnections,tabs,active}` and swaps `/ui/form` to the selected connection's draft. A connection is "connected" once discovery has cached models on it. It re-runs on every `AiConfig` update **and** when the host re-syncs on tab change; the form is re-seeded only when the active connection id actually changes, so in-progress edits survive unrelated config updates. Neither the bridge nor the component subscribes through json-render, avoiding the new-reference notification loop.
-- **Action handlers.** `connectConnection` validates a URL when required (`anthropic`/`openai-compatible`), persists the shell, flushes the key, discovers models, and — only when `starredModelIds` is empty — seeds default stars via `applyDefaultStarred`. `removeConnection` gates behind a confirm dialog when the connection has a stored key (`hasKey`), then advances the active tab to a neighbour. `toggleModelStar`, `addHeader`, `removeHeader` are small store/`AiConfig` mutations.
+`createConnectionsBridge(store, aiConfig)` writes
+`/persistent/{hasConnections,tabs,active}` from `AiConfig.listConnections()`
+and loads the selected connection's draft into `/ui/form`. It runs on every
+`AiConfig` update and on tab changes. The form is reloaded only when the
+selected connection changes, so typing is not lost when an unrelated config
+update arrives. A connection counts as connected once models were discovered
+for it.
 
-### Constraints
+### API keys are write-only
 
-- Renders through `@statewalker/ui.view.shadcn` primitives; `react`/`react-dom` are peer dependencies (`>=18`). The `./styles` export is currently a placeholder hook for panel-specific tweaks.
-- The catalog's component and action vocabularies must stay in lockstep with `@statewalker/ai-config`'s `CONNECTIONS_COMPONENTS` / `CONNECTIONS_ACTIONS` name-sets (the logic package's validation test enforces the spec stays within them).
+The bridge never reads a key back; the key field always starts empty.
+`connectConnection` writes the key to `Secrets` (via `AiConfig.setApiKey`)
+only when the field is not empty. An empty field keeps the stored key, so
+re-testing does not erase it.
+
+### What "Connect" does, and what the user sees when it fails
+
+1. URL required for `anthropic` and `openai-compatible`; otherwise the form
+   shows `A URL is required for <type> connections.`
+2. Saves the connection (name, URL, headers).
+3. Saves the key, or, if none is typed and none is stored, shows
+   `An API key is required.`
+4. Fetches the model list. If no models are starred yet, stars the defaults
+   from `applyDefaultStarred`.
+5. If no model is active yet, makes the first starred model active, so a new
+   workspace can start a chat session.
+6. Collapses the form. Any thrown error is shown as its message in the form.
+
+Removing a connection that has a stored key asks for confirmation first.
+
+### Custom components
+
+- `Collapsible` (controlled): open state lives in `/ui/form/settingsOpen`, so
+  a successful connect can collapse the form. The stock shadcn one only has
+  `defaultOpen`.
+- `StatusTabs`: tab strip with a status dot (connected, testing, error, idle).
+- `FieldInput`: sets `autoComplete`, `data-1p-ignore` and `data-lpignore` to
+  stop password managers from filling one connection's key into another, and
+  has a show/hide toggle for the key.
+
+The component and action names must stay within
+`CONNECTIONS_COMPONENTS` / `CONNECTIONS_ACTIONS` from
+`@statewalker/ai-config.core`.
 
 ### Dependencies
 
-- `@statewalker/ai-config` — the logic contract: spec, catalog id, vocabularies, `AiConfig` adapter, `applyDefaultStarred`, `capabilitiesFor`.
-- `@json-render/core` / `@json-render/shadcn` — `Spec`/`StateStore`, `defineCatalog`, and the stock shadcn component definitions/bindings extended here.
-- `@statewalker/render.core` / `@statewalker/render.view.react` — `SpecRenderer`, `defineRegistry`, `schema`, and the `useStateBinding`/`useBoundProp` hooks the custom components use.
-- `@statewalker/settings.core` — `settingsTabSlot`, `OpenSettingsCommand` for the tab contribution and deep-link.
-- `@statewalker/ui.view.react` / `@statewalker/ui.view.shadcn` — `coreViewsSlot`/`ViewComponent`, `useAppWorkspace`, and the shadcn primitives (`Collapsible`, `Tabs`, `Input`, `Button`, …).
-- `@statewalker/workspace.core` — `getWorkspace`, the adapter host.
-- `@statewalker/shared-commands` / `@statewalker/shared-registry` / `@statewalker/shared-slots` — command bus, scoped cleanup, slot registration.
-- `lucide-react` (eye icons), `zod` (catalog prop/param schemas).
-
-## Related
-
-- `@statewalker/ai-config` — the React-free logic fragment this renderer pairs with.
-- `@statewalker/ai-agent-runtime` — consumes the active selection that this panel lets the user pick.
-- `@statewalker/render.view.react` — the json-render React renderer this builds on.
+- `@statewalker/ai-config.core` — `AiConfig`, the spec, ids, `ConfigureAiCommand`, `applyDefaultStarred`.
+- `@json-render/core`, `@json-render/shadcn` — `StateStore`, `defineCatalog`, stock shadcn components.
+- `@statewalker/render.view.react` — `SpecRenderer`, `defineRegistry`, `schema`, binding hooks.
+- `@statewalker/settings.core` — `settingsTabSlot`, `OpenSettingsCommand`.
+- `@statewalker/ui.view.react`, `@statewalker/ui.view.shadcn` — `coreViewsSlot`, `useAppWorkspace`, primitives.
+- `@statewalker/workspace.core`, `@statewalker/shared-commands`, `@statewalker/shared-registry`, `@statewalker/shared-slots` — fragment wiring.
+- `lucide-react` (eye icons), `zod` (schemas).
+- `@statewalker/render.core` — declared but not imported by the source.
 
 ## License
 
-MIT — see the monorepo root `LICENSE`.
+MIT

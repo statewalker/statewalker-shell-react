@@ -1,25 +1,36 @@
 # {{packageName}}
 
-{{packageDescription}}
+## What it is
 
-## Installation
+<!-- One paragraph: what the package does. -->
+
+## Why it exists
+
+<!-- The problem it solves, and why it is a separate package. -->
+
+## How to use
 
 ```sh
 pnpm add {{packageName}}
 ```
 
-## Usage
+Peer dependencies: `react` and `react-dom` (`>=18`).
 
-<!-- One minimal end-to-end example. Keep it short. -->
+| Import | Provides |
+| --- | --- |
+| `{{packageName}}` | <!-- named exports; default export is the fragment init --> |
+| `{{packageName}}/fragment` | <!-- what init(ctx) registers --> |
+| `{{packageName}}/styles` | Tailwind v4 `@source` globs |
 
-```ts
-import {} from "{{packageName}}";
-```
+## Examples
 
-## API
+<!-- One copy-pasteable example per main export, with real imports. -->
 
-<!-- List exported symbols with a one-line description each. -->
+## Internals
 
-## Related
+<!-- Design choices and the reason for each, non-obvious behavior, failure
+modes with the text the user sees, dependencies and why. -->
 
-<!-- Links to sibling packages in this monorepo that are typically used alongside this one. -->
+## License
+
+MIT

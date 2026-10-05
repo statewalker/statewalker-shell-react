@@ -2,23 +2,18 @@
 
 ## What it is
 
-The React renderer for the workbench file explorer. It binds the
-`file-explorer` json-render catalog, renders the panel UI
-(`FileExplorerPanel`, `FilesListView`, plus internal breadcrumb / file-row /
-drag-and-drop), applies the two-pane panel presets into the dock on workspace
-open, and serves the `file-explorer:new-panel` command. It is the view half of
-`@statewalker/explorer.core`, which owns all the
-React-free logic.
+A view fragment for file-explorer tabs in the dock. Each tab shows one folder
+as a list with breadcrumbs, a filter and drag and drop. The fragment binds the
+`file-explorer` json-render catalog to React, opens the panel presets from
+`@statewalker/explorer.core` when a workspace opens, and handles the
+`file-explorer:new-panel` command.
 
 ## Why it exists
 
-Per ADR-0002 the explorer is split into a logic fragment and a renderer
-fragment. This package is the renderer: it consumes the models, controller, spec
-helpers, and slots from `explorer.core` and turns them into mounted dock panels.
-It also holds the schema-typed json-render catalog (`fileExplorerCatalog`),
-which must live on the React side because it needs `@json-render/react`'s
-`schema` (reached through `@statewalker/render.view.react`, the sole
-json-render/react boundary).
+`@statewalker/explorer.core` holds the models, the panel controller, the
+commands, the slots and the spec helpers, with no React. This package turns
+them into dock tabs. The schema-typed catalog (`fileExplorerCatalog`) lives
+here because building it needs json-render's React `schema`.
 
 ## How to use
 
@@ -26,112 +21,108 @@ json-render/react boundary).
 pnpm add @statewalker/explorer.view.react
 ```
 
-Three entry points:
+Peer dependencies: `react` and `react-dom` (`>=18`).
 
-- `@statewalker/explorer.view.react` — public React surface
-  (`FileExplorerPanel`, `FileExplorerPanelProps`, `FilesListView`).
-- `@statewalker/explorer.view.react/fragment` — default-exported
-  `initFileExplorerReact(ctx)` renderer-fragment init.
-- `@statewalker/explorer.view.react/styles` — the bundled `styles.css`.
+| Import | Provides |
+| --- | --- |
+| `@statewalker/explorer.view.react` | `FileExplorerPanel`, `FileExplorerPanelProps`, `FilesListView`; default export is the fragment init |
+| `@statewalker/explorer.view.react/fragment` | Default export: `init(ctx)` returning `() => Promise<void>` |
+| `@statewalker/explorer.view.react/styles` | Tailwind v4 `@source` globs |
 
-The host app registers the fragment init and imports the styles. The init wires
-the catalog, the dock-tab icon, the two-pane preset applier, and the new-panel
-command; it returns a `cleanup` thunk. Peer-depends on `react` / `react-dom` >= 18.
+Activate it after the `explorer.core`, `render.core` and `shell.core` logic
+fragments:
+
+```ts
+import "@statewalker/explorer.view.react/styles";
+import initExplorerView from "@statewalker/explorer.view.react/fragment";
+
+const cleanup = initExplorerView(ctx);
+```
+
+The init:
+
+1. Registers the catalog under `FILE_EXPLORER_CATALOG_ID` in `json:catalogs`.
+2. Adds a folder icon for tabs whose id starts with `file-explorer:`.
+3. On workspace open, creates specs for `file-explorer:` tabs in the saved
+   layout (from the `LayoutStore` adapter), then opens one dock tab per entry
+   in the `file-explorer:panels` preset slot.
+4. Listens for `NewFileExplorerPanelCommand` (`file-explorer:new-panel`).
 
 ## Examples
 
-Register the fragment (host wiring) — pairs with the logic fragment:
+### Open a new explorer tab
 
 ```ts
-import initFileExplorer from "@statewalker/explorer.core/fragment";
-import initFileExplorerReact from "@statewalker/explorer.view.react/fragment";
-import "@statewalker/explorer.view.react/styles";
+import { NewFileExplorerPanelCommand } from "@statewalker/explorer.core";
 
-const cleanupLogic = initFileExplorer(ctx);
-const cleanupView = await initFileExplorerReact(ctx);
+const { panelId } = await commands.call(NewFileExplorerPanelCommand, {
+  initialPath: "/docs",
+  label: "Docs",
+  position: "right",
+}).promise;
 ```
 
-Mount a single panel directly (outside the dock):
+Defaults: `initialPath` `"/"`, `label` `"Files"`, `position` `"within"`. The
+result's `panelId` is the generated id (`panel-<8 hex chars>`); the dock tab id
+is `file-explorer:` followed by it.
+
+### Mount one panel outside the dock
 
 ```tsx
 import { FileExplorerPanel } from "@statewalker/explorer.view.react";
 
-<FileExplorerPanel
-  panelId="left"
-  initialPath="/"
-  label="Files"
-  folderNavigationHost
-/>;
+<FileExplorerPanel panelId="left" initialPath="/" label="Files" folderNavigationHost />;
 ```
 
-The catalog binding means a dock tab built from `makeFileExplorerSpec(panelId)`
-(in `explorer.core`) resolves to `FileExplorerView`, which renders a
-`FileExplorerPanel`.
+`FileExplorerPanelProps`: `panelId` (required), `initialPath`, `label`,
+`mainViewerHost`, `folderNavigationHost`. The panel needs an
+`<AppWorkspaceProvider>` ancestor.
+
+`FilesListView` (`{ model, panelId, onOpen }`) is the list itself, for hosts
+that create their own `FilesListModel`.
 
 ## Internals
 
-### Architectural decisions
+### How presets become tabs
 
-- **Catalog binding is the integration seam.** `init.tsx` calls `defineRegistry`
-  against `fileExplorerCatalog` and registers it under
-  `FILE_EXPLORER_CATALOG_ID` in `catalogsSlot`, so any spec produced by
-  `makeFileExplorerSpec` renders a `FileExplorerPanel`.
-- **Panels are ordinary dock tabs.** Two-pane presets are applied by dispatching
-  one `dock:show-panel` (`ShowDockPanelCommand`) per preset, so explorer panels
-  appear in the central `DockViewHost` exactly like markdown / pdf / image
-  viewers. A preset's `side` becomes a dock-position hint (`left` / `right` split,
-  else `within`); the first preset opens at the default position.
-- **Spec pre-allocation avoids a flash.** `restorePanelSpecsFromLayout` runs
-  synchronously at init so every persisted `file-explorer:` panel id has a spec
-  before `DockView.fromJSON()` runs, preventing a `PanelMissing` placeholder.
-  When a preset later arrives, an existing pre-allocated spec is `patch`ed up to
-  the full preset (label, host flags) rather than left at restore defaults.
-- **Each panel owns its `PanelController`** (`useMemo` keyed on workspace /
-  panelId / label / initialPath) and registers an `ActiveFileExplorerPanel` into
-  `activeFileExplorerPanelsSlot` so the logic-side `files:open` handler can route
-  navigations to it. Every click / keypress dispatches `files:open` with the
-  panel id as both `origin` and `target`, so folders navigate in place.
-- **`useViewModel`** wraps `useSyncExternalStore` over a `ViewModel`'s
-  `onUpdate` / `version`, the bridge between the React-free reactive models and
-  the React render loop.
+Presets are sorted by `order`, then `id`. The first opens at the default
+position. Each next one with `side: "left"` or `"right"` splits on that side;
+`side: "main"` or no side adds a tab to the previous group. Opened preset ids
+are remembered until the workspace unloads, so presets added later (the slot
+is observed) do not duplicate tabs. A failed `dock:show-panel` is logged as
+`[file-explorer] failed to open dock panel:` and the other presets still open.
 
-### Algorithms
+### Why specs are created before the layout is restored
 
-- **Preset idempotency:** an `opened` set tracks already-mounted preset ids so
-  hot-added presets (observed via `slots.observe`) don't duplicate tabs;
-  `workspace.onUnload` clears it. `workspace.onLoad` fires immediately if already
-  open, so one subscription covers first-load and re-open.
-- **`file-explorer:new-panel`** generates a fresh `panel-<uuid8>` id, creates a
-  persistent spec, shows the dock panel (default position `within`), and resolves
-  with the new id.
+The dock restores tabs from the saved layout. A tab whose spec does not exist
+yet shows `Spec <specId> is missing.` To avoid that, the init creates a
+default spec for every saved `file-explorer:` tab first. When a preset for the
+same id arrives, the spec is patched with the preset's label and flags.
 
-### Constraints
+### Navigation
 
-- Peer-depends on React 18+; `styles.css` must be imported by the host.
-- Folder single-click navigates; files require double-click / Enter (so they stay
-  draggable).
+Every activation (folder click, double-click, Enter, Backspace, breadcrumb)
+calls `files:open` with this panel as both `origin`
+and `target`, so folders open in place. One click opens a folder; a file needs
+a double-click or Enter, so that a single click can start a drag. Each panel
+registers itself in `activeFileExplorerPanelsSlot` so the `files:open` handler
+in `explorer.core` can route to it.
+
+### Not implemented
+
+There is no tree view, context menu or search panel in this package.
 
 ### Dependencies
 
-`@statewalker/explorer.core` (models, controller, commands, slots, spec
-helpers), `@statewalker/render.core` (`SpecStore`, `catalogsSlot`, layout
-restore), `@statewalker/render.view.react` (`schema`, `defineRegistry`),
-`@statewalker/shell.core` (`ShowDockPanelCommand`, `FocusPanelCommand`,
-`PanelPosition`), `@statewalker/shell.view.react` (`dockTabIconSlot`),
-`@statewalker/ui.view.react` (`useAdapter`, `useAppWorkspace`,
-`compareByOrderAndId`), `@statewalker/ui.view.shadcn`, `mime.core`
-(`OpenCommand`), `workspace.core` (`getWorkspace`), `shared-commands`,
-`shared-registry`, `shared-slots`, `@json-render/core`, `zod`, `lucide-react`.
-
-## Related
-
-- `@statewalker/explorer.core` — the paired
-  React-free logic fragment (the `.core` ↔ `.view.react` pair).
-- `@statewalker/render.view.react` — the
-  json-render/react boundary supplying `schema` / `defineRegistry`.
-- `@statewalker/shell.view.react` — dock host
-  and tab-icon slot.
+- `@statewalker/explorer.core` — models, controller, commands, slots, spec helpers.
+- `@statewalker/render.core`, `@statewalker/render.view.react` — `SpecStore`, `LayoutStore`, `json:catalogs`, `defineRegistry`, `schema`.
+- `@statewalker/shell.core`, `@statewalker/shell.view.react` — `ShowDockPanelCommand`, `dockTabIconSlot`.
+- `@statewalker/mime.core` — `OpenCommand` (`files:open`).
+- `@statewalker/ui.view.react` — hooks, `compareByOrderAndId`.
+- `@statewalker/shared-commands`, `@statewalker/shared-slots`, `@statewalker/shared-registry`, `@statewalker/workspace.core` — fragment wiring.
+- `@json-render/core`, `zod`, `lucide-react`.
+- `@statewalker/ui.view.shadcn`, `@statewalker/shared-baseclass`, `@statewalker/webrun-files` — declared but not imported by the source.
 
 ## License
 
-MIT — see the monorepo root `LICENSE`.
+MIT
