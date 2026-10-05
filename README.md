@@ -1,181 +1,166 @@
-# statewalker-workbench
+# statewalker-shell-react
 
-Application shell and fragment platform for the statewalker ecosystem — backbone runtimes, the platform-capability vocabulary, and the canonical workbench substrate (logic + renderer fragments).
+## What it is
 
-## Packages
+React renderers for the statewalker application shell. Each package here is
+the view half of a logic package: the logic package (for example
+`@statewalker/shell.core`) holds state, commands and slots with no React, and
+the package here (`@statewalker/shell.view.react`) renders them. Together they
+give an app a React mount, a dockview-based shell, a settings dialog, a file
+explorer, viewers for images, Markdown, PDF and video, and the AI settings
+tabs. All packages are published to npm under `@statewalker/*`.
 
-Packages follow the **`@statewalker/${domain}.${aspect}.${modifier}`** convention
-(all-dots; `aspect` ∈ `{core, view, browser, node, cloud, feature}`; a `view` leaf
-— `*.view.react` / `*.view.shadcn` / `*.view.<mime>` — is the only place a UI tech
-may be imported). See the `workbench-package-naming` capability spec.
+## The shape: fifteen view packages, no apps
 
-### Backbone (independent runtime)
+```
+packages/
+  ui.view.react             React mount, <AppRoot>, core:views slot, workspace hooks, theme CSS
+  ui.view.shadcn            shadcn/ui primitives and cn()
+  render.view.react         <SpecRenderer>; re-exports from @json-render/react
+  shell.view.react          dockview host, MainShell, header, the "json" dock panel, tab icons
+  workspace.view.react      workspace label header item, switch-workspace button
+  settings.view.react       settings dialog and settings button
+  explorer.view.react       file-explorer panels (list, breadcrumbs, filter, drag and drop)
+  inline.view.react         <InlineContent> and the built-in inline components
+  mime.view.image           image/* viewer
+  mime.view.markdown        text/markdown viewer and a reusable <Markdown> component
+  mime.view.pdf             application/pdf viewer (browser built-in PDF viewer)
+  mime.view.video           video/* viewer
+  ai-config.view.react      "Remote Models" settings tab
+  ai-local-models.view.react "Local Models" settings tab
+  webapp.view.react         <SiteFrame>: iframe dock panel for a web app hosted from the workspace
+```
 
-| Package | Description |
+| Package | npm |
 | --- | --- |
-| [`@statewalker/backbone.core`](packages/backbone.core) | Backbone primitives: resolver, topo sort, activation, manifest types, vendored logger. |
-| [`@statewalker/backbone.node`](packages/backbone.node) | Node bootstrap: resolves `AppManifest` against the filesystem and activates modules. |
-| [`@statewalker/backbone.browser`](packages/backbone.browser) | Browser runtime: fragment loader + web-side module activation. |
+| [`@statewalker/ui.view.react`](packages/ui.view.react) | [npm](https://www.npmjs.com/package/@statewalker/ui.view.react) |
+| [`@statewalker/ui.view.shadcn`](packages/ui.view.shadcn) | [npm](https://www.npmjs.com/package/@statewalker/ui.view.shadcn) |
+| [`@statewalker/render.view.react`](packages/render.view.react) | [npm](https://www.npmjs.com/package/@statewalker/render.view.react) |
+| [`@statewalker/shell.view.react`](packages/shell.view.react) | [npm](https://www.npmjs.com/package/@statewalker/shell.view.react) |
+| [`@statewalker/workspace.view.react`](packages/workspace.view.react) | [npm](https://www.npmjs.com/package/@statewalker/workspace.view.react) |
+| [`@statewalker/settings.view.react`](packages/settings.view.react) | [npm](https://www.npmjs.com/package/@statewalker/settings.view.react) |
+| [`@statewalker/explorer.view.react`](packages/explorer.view.react) | [npm](https://www.npmjs.com/package/@statewalker/explorer.view.react) |
+| [`@statewalker/inline.view.react`](packages/inline.view.react) | [npm](https://www.npmjs.com/package/@statewalker/inline.view.react) |
+| [`@statewalker/mime.view.image`](packages/mime.view.image) | [npm](https://www.npmjs.com/package/@statewalker/mime.view.image) |
+| [`@statewalker/mime.view.markdown`](packages/mime.view.markdown) | [npm](https://www.npmjs.com/package/@statewalker/mime.view.markdown) |
+| [`@statewalker/mime.view.pdf`](packages/mime.view.pdf) | [npm](https://www.npmjs.com/package/@statewalker/mime.view.pdf) |
+| [`@statewalker/mime.view.video`](packages/mime.view.video) | [npm](https://www.npmjs.com/package/@statewalker/mime.view.video) |
+| [`@statewalker/ai-config.view.react`](packages/ai-config.view.react) | [npm](https://www.npmjs.com/package/@statewalker/ai-config.view.react) |
+| [`@statewalker/ai-local-models.view.react`](packages/ai-local-models.view.react) | [npm](https://www.npmjs.com/package/@statewalker/ai-local-models.view.react) |
+| [`@statewalker/webapp.view.react`](packages/webapp.view.react) | [npm](https://www.npmjs.com/package/@statewalker/webapp.view.react) |
 
-### Platform capabilities
-
-| Package | Description |
-| --- | --- |
-| [`@statewalker/platform.core`](packages/platform.core) | Type-only command vocabulary: pickers, downloads, clipboard, preferences, URL state. |
-| [`@statewalker/platform.browser`](packages/platform.browser) | Browser implementation of the platform commands. |
-| [`@statewalker/platform.node`](packages/platform.node) | Node implementation of the platform commands — filesystem-backed durable preferences. |
-
-### Workspace foundation
-
-| Package | Description |
-| --- | --- |
-| [`@statewalker/workspace.core`](packages/workspace.core) | Workspace logic: the `Workspace` class, project/resource model, class-keyed adapters, the `files:*` filesystem commands (`WorkspaceFilesManager`), and the `workspace:change` command. |
-| [`@statewalker/workspace.browser`](packages/workspace.browser) | Browser FS-Access lifecycle for the workspace: `WorkspaceShellAdapter` + `workspace:*` commands. |
-| [`@statewalker/workspace.view.react`](packages/workspace.view.react) | Workspace renderer: `AppWorkspaceProvider`, `DirectoryPickerEmptyState`, `ReconnectBanner`, switch-workspace header item. |
-
-### UI substrate
-
-| Package | Description |
-| --- | --- |
-| [`@statewalker/ui.view.react`](packages/ui.view.react) | React mount, `<AppRoot>`, `core:views` slot, substrate hooks (`useSlot`, `useKeyedSlot`, `useAdapterValue`, `useAdapter`), theme binding. |
-| [`@statewalker/ui.view.shadcn`](packages/ui.view.shadcn) | shadcn/ui primitives + `cn()` helper for the workbench substrate. |
-
-### Shell (application frame)
-
-| Package | Description |
-| --- | --- |
-| [`@statewalker/shell.core`](packages/shell.core) | Frame logic: `dock:*` slot keys, `dock:show-panel`/`close-panel`/`focus-panel` commands, dock state. |
-| [`@statewalker/shell.view.react`](packages/shell.view.react) | Frame UI: `dockview-react` host, `MainShell`, `ShellHeader`, `JsonPanel` (registers `MainShell` into `core:views`). |
-
-### Render engine (json-render)
-
-| Package | Description |
-| --- | --- |
-| [`@statewalker/render.core`](packages/render.core) | json-render engine state (opaque, no `@json-render` dep): `SpecStore` + `spec:create`/`spec:patch` + `restorePanelSpecsFromLayout`, plus the `json:catalogs` slot. |
-| [`@statewalker/render.view.react`](packages/render.view.react) | The sole `@json-render/react` boundary: `<SpecRenderer spec registry>` + `defineRegistry`/`schema` re-exports. |
-
-### Files & MIME viewers
-
-| Package | Description |
-| --- | --- |
-| [`@statewalker/mime.core`](packages/mime.core) | Mime-viewer dispatch: `files:visualize`/`files:open`, the `mime:renderers`/`mime-icons`/`editor-factories` slots, `MimeRenderer` + `pickMimeRenderer`. |
-| [`@statewalker/mime.view.image`](packages/mime.view.image) | Image viewer renderer. |
-| [`@statewalker/mime.view.markdown`](packages/mime.view.markdown) | Markdown viewer renderer. |
-| [`@statewalker/mime.view.pdf`](packages/mime.view.pdf) | PDF viewer renderer. |
-| [`@statewalker/mime.view.video`](packages/mime.view.video) | Video viewer renderer. |
-
-### Explorer
-
-| Package | Description |
-| --- | --- |
-| [`@statewalker/explorer.core`](packages/explorer.core) | File-explorer logic: navigation, search controller, tree-state, browser orchestration commands. |
-| [`@statewalker/explorer.view.react`](packages/explorer.view.react) | File-explorer renderer: tree, list, drag-and-drop, context menu, breadcrumbs, search panel. |
-
-### Settings & inline content
-
-| Package | Description |
-| --- | --- |
-| [`@statewalker/settings.core`](packages/settings.core) | Settings logic: `settings:*` slots and commands. |
-| [`@statewalker/settings.view.react`](packages/settings.view.react) | Settings renderer: dialog + header-items button. |
-| [`@statewalker/inline.core`](packages/inline.core) | Inline-content logic: `inline-content:components` descriptor slot + types. |
-| [`@statewalker/inline.view.react`](packages/inline.view.react) | Inline-content renderer: `inline-content:renderers` slot, `<InlineContent>`, built-ins. |
-
-### AI
-
-| Package | Description |
-| --- | --- |
-| [`@statewalker/ai-agent.core`](packages/ai-agent.core) | Agent runtime logic — sessions, tools, providers. React-free. |
-| [`@statewalker/ai-agent-runtime.core`](packages/ai-agent-runtime.core) | Fragment orchestrator wiring the agent runtime into a workspace. |
-| [`@statewalker/ai-config.core`](packages/ai-config.core) | Unified AI configuration: connections, models, credentials. Takes a host (`files` + `secrets`) rather than a `Workspace`. |
-| [`@statewalker/ai-config.view.react`](packages/ai-config.view.react) | Renderer for the AI connections settings tab. |
-| [`@statewalker/ai-local-models.core`](packages/ai-local-models.core) | Local (in-browser) model lifecycle and weight storage. |
-| [`@statewalker/ai-local-models.browser`](packages/ai-local-models.browser) | Browser implementation of the local-model runtime. |
-| [`@statewalker/ai-local-models.view.react`](packages/ai-local-models.view.react) | Renderer for the Local Models settings tab. |
-| [`@statewalker/ai-openai-compat.core`](packages/ai-openai-compat.core) | Wire-format adapter exposing Vercel AI SDK providers over an OpenAI-compatible surface. |
-
-### Web app hosting
-
-| Package | Description |
-| --- | --- |
-| [`@statewalker/webapp.core`](packages/webapp.core) | Web-application hosting logic — serves a built site from the workspace. |
-| [`@statewalker/webapp.browser`](packages/webapp.browser) | Browser implementation of the hosting runtime. |
-| [`@statewalker/webapp.view.react`](packages/webapp.view.react) | Renderer for the hosted-app surface. |
-
-### Version control
-
-| Package | Description |
-| --- | --- |
-| [`@statewalker/workspace-vcs.core`](packages/workspace-vcs.core) | Git as an opt-in project nature — a real native-git-compatible `.git` per project, manual commits, HTTP remotes. Bridges the workspace to [`webrun-vcs`](https://github.com/statewalker/webrun-vcs). |
-
-## Backbone independence rule
-
-The `backbone.*` packages MUST NOT declare a runtime dependency on any other `@statewalker/*` package — including siblings in this monorepo. Backbone vendors the narrow slices it needs (currently `Logger`/`getLogger` from `@statewalker/shared-logger`) into `backbone.core/src/_vendor/`. A CI check (`scripts/check-backbone-isolation.ts`) enforces this invariant on every PR.
-
-Substrate fragments may depend on backbone, never the reverse.
-
-## Substrate fragment shape
-
-Every substrate fragment package follows a single canonical layout, enforced by the `workbench-canonical-substrate` capability spec:
+Most packages share one source layout:
 
 ```
 src/
-  index.ts          # re-exports public/index.js
-  fragment.ts       # re-exports public/init.js's default
-  public/           # types, commands, slot keys, manager classes, init
-  internal/         # impl + tests; not reachable through any export sub-path
-  styles.css        # renderer fragments only — Tailwind v4 @source globs
+  index.ts      re-exports public/index.ts and the default init
+  fragment.ts   re-exports the default init
+  public/       exported components, slots, catalogs, init
+  internal/     implementation and tests; not reachable through exports
+  styles.css    Tailwind v4 @source globs (ui.view.react also defines the theme)
 ```
 
-`package.json#exports` declares exactly `"."` and `"./fragment"` for logic fragments, plus `"./styles"` for renderer fragments (the `*.view.*` leaves). `*.core` (and bare `*.view`) packages do not import React or any `*.view.*` package — the ADR-0002 boundary, keyed on the `view` leaf.
+Each package exports `.` and `./fragment` from `dist/` (JS and `.d.ts`) and,
+when it has a stylesheet, `./styles` from `src/styles.css`.
+`render.view.react` exports only `.`. `webapp.view.react` has no `./styles` and
+keeps its sources directly in `src/`. Packages ship both `dist/` and `src/`.
 
-## Cross-repo dependencies
+The packages use these `@statewalker` packages from npm: `shell.core`,
+`workspace.core`, `workspace.browser`, `render.core`, `mime.core`,
+`explorer.core`, `inline.core`, `settings.core`, `webapp.browser`,
+`ai-config.core`, `ai-local-models.core`, `shared-baseclass`,
+`shared-commands`, `shared-registry`, `shared-slots`, `webrun-files` and (in
+tests) `webrun-files-mem`.
 
-This repository depends on:
+## How to run it
 
-| Repository | Packages used |
+1. Install Node.js 24.
+2. Enable corepack so the pinned pnpm 10 is used: `corepack enable`.
+3. Install: `pnpm install`.
+4. Build every package: `pnpm build`.
+5. Run the tests: `pnpm test`.
+
+There is no app in this repository to start. The packages are activated by a
+host app; see "How a host app wires the packages" below.
+
+## Why it is the way it is
+
+### Logic and view live in separate packages
+
+A `*.view.*` package is the only kind of package allowed to import a UI
+library (React, shadcn, the json-render React bindings). The logic packages
+stay React-free, so they can be tested without a DOM and a different renderer
+could replace these packages. Values that cross from logic to view are data:
+a logic package names a component by a string `viewKey`, and the view
+package registers the component under that key in the `core:views` slot.
+
+### How a host app wires the packages
+
+Every package with a `./fragment` export has a default export
+`init(ctx) => cleanup`. It reads the `Workspace` from `ctx`, registers
+components into slots, and returns a function that removes them.
+
+```
+host boot
+  create Workspace, put it into ctx
+  init logic fragments      (shell.core, settings.core, explorer.core, ...)
+  init view fragments       (ui.view.react, shell.view.react, settings.view.react, ...)
+                            ui.view.react: createRoot(#app).render(<AppRoot/>)
+  import each package's ./styles once
+```
+
+`ui.view.react` renders whatever is registered under `shell:root` in
+`core:views`; `shell.view.react` registers `MainShell` there. Neither imports
+the other's components.
+
+### Dependency specifiers
+
+Packages inside this repository depend on each other with `workspace:^`.
+Everything else comes from the pnpm catalog in `pnpm-workspace.yaml`
+(`catalog:`); `react` and `react-dom` are peers (`catalog:peers`, `>=18`).
+
+## What will surprise you
+
+- **Components render without colors or spacing.** The host did not import
+  `@statewalker/ui.view.react/styles` (theme variables) or a package's
+  `./styles` (Tailwind `@source` globs), so Tailwind did not emit its classes.
+- **`useAppWorkspace must be used inside <AppWorkspaceProvider>.`** A
+  component that uses the workspace hooks was rendered outside `<AppRoot>`.
+- **`No adapter registered for ...`** at fragment init. A view fragment ran
+  before the logic fragment that installs the adapter it needs (for example
+  `SpecStore`, `LayoutStore`, `DockHost`).
+- **A dock tab shows "Spec ... is missing." or "Catalog ... is not
+  registered."** The panel was restored from the saved layout, but no
+  fragment created its spec or registered its catalog.
+- **The page stays empty and nothing is logged.** There is no element with
+  `id="app"`; `ui.view.react`'s init then skips the mount silently.
+- **Nothing renders after the folder is opened.** No component is registered
+  under `shell:root`: `shell.view.react`'s fragment was not activated.
+- **Cleanup functions return promises.** Most `init` functions return
+  `() => Promise<void>`; await them when tearing down.
+
+## Reference
+
+### Commands
+
+| Command | What it does |
 | --- | --- |
-| [`statewalker-fsm`](https://github.com/statewalker/statewalker-fsm) | `@statewalker/fsm` |
-| [`statewalker-shared`](https://github.com/statewalker/statewalker-shared) | `@statewalker/shared-adapters`, `@statewalker/shared-baseclass`, `@statewalker/shared-commands`, `@statewalker/shared-ids`, `@statewalker/shared-logger`, `@statewalker/shared-logger-pino`, `@statewalker/shared-registry`, `@statewalker/shared-slots` |
-| [`webrun-files`](https://github.com/statewalker/webrun-files) | `@statewalker/webrun-files`, `@statewalker/webrun-files-browser`, `@statewalker/webrun-files-composite`, `@statewalker/webrun-files-mem`, `@statewalker/webrun-files-node` |
-| [`webrun-transform`](https://github.com/statewalker/webrun-transform) | `@statewalker/webrun-builder`, `@statewalker/webrun-dataflow`, `@statewalker/webrun-modules` |
-| [`webrun-vcs`](https://github.com/statewalker/webrun-vcs) | `@statewalker/vcs-commands`, `@statewalker/vcs-core`, `@statewalker/vcs-store-files`, `@statewalker/vcs-transport`, `@statewalker/vcs-transport-adapters`, `@statewalker/vcs-working-tree`, `@statewalker/vcs-workspace` |
-| [`webrun-wire`](https://github.com/statewalker/webrun-wire) | `@statewalker/webrun-site-builder`, `@statewalker/webrun-site-host` |
+| `pnpm install` | Install dependencies |
+| `pnpm build` | Build every package with tsdown |
+| `pnpm test` | Run every package's vitest suite |
+| `pnpm typecheck` | Type-check every package |
+| `pnpm lint` / `pnpm lint:check` | Biome check, with or without fixes |
+| `pnpm format` / `pnpm format:check` | Biome format, with or without writes |
+| `pnpm changeset` | Add a changeset to pick a version bump and changelog text |
 
-Cross-repo dependencies are declared `workspace:*` rather than `catalog:`. This is
-deliberate: turbo derives its task graph from `workspace:` specifiers and does **not**
-resolve `catalog:`, so a `catalog:` cross-repo dependency is invisible to the scheduler
-and its consumer can be built before it.
+### Releases
 
-## Development
+Packages are published to npm from CI with changesets. After CI passes on
+`main`, a job adds a patch changeset for each package whose packed contents
+differ from npm and opens a "chore: version packages" pull request; merging it
+publishes. Add your own changeset with `pnpm changeset` to choose the bump or
+the changelog text. Dependency updates come from Renovate.
 
-```sh
-pnpm install
-pnpm run build
-pnpm run test
-```
+### License
 
-## Release
-
-Releases are managed via [changesets](https://github.com/changesets/changesets):
-
-```sh
-pnpm changeset           # describe the change
-pnpm version-packages    # roll versions + regenerate CHANGELOGs
-pnpm release-packages    # publish to npm
-```
-
-## History
-
-The initial commit on `main` is a fresh template expansion; pre-split history is preserved as archaeology-only branches:
-
-- `history/backbone-common`, `history/backbone-server`, `history/backbone-web`
-- `history/shared-views`, `history/shared-dom`, `history/shared-react`
-- `history/shared-react-shadcn` (sourced from `shared-react.shadcn/`)
-- `history/shared-react-spectrum` (sourced from `shared-react.spectrum/`)
-- `history/app-shell-core` (sourced from `workspaces/workspace-explorer/apps/app.shell.core/`; package later folded into `shared-views`)
-
-These branches are never merged into `main`; `git log` them when walking blame across the split.
-
-## License
-
-MIT — see `LICENSE`.
+MIT. See [LICENSE](LICENSE).

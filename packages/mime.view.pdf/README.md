@@ -2,18 +2,18 @@
 
 ## What it is
 
-The React renderer fragment for PDF files. It contributes an `application/pdf`
-`MimeRenderer` to the `files:mime-renderers` slot of
-`@statewalker/mime.core`, registers the `pdf-viewer`
-json-render catalog, and binds the `PdfView` component that loads a file and
-hands it to the browser's built-in PDF viewer via an `<embed>` in a dock panel.
+A view fragment that opens PDF files in a dock tab. It adds a
+`MimeRenderer` for `application/pdf` to the `files:mime-renderers` slot of
+`@statewalker/mime.core`, registers the `pdf-viewer` json-render catalog, and
+binds its `PdfView` component, which loads the file and
+shows it with the browser's built-in PDF viewer (`<embed type="application/pdf">`).
 
 ## Why it exists
 
-`mime.core` dispatches a URI to whichever renderer claims its MIME type but
-holds no React and no concrete viewer. This package is the PDF half of that
-split (ADR-0002). Opening an `application/pdf` file via `files:visualize` lands
-here.
+`@statewalker/mime.core` sends a file URI to whichever renderer claims its
+MIME type, but contains no viewers. This package is the PDF viewer. After it is
+activated, `files:visualize` (`VisualizeFileCommand`) on a file of type `application/pdf`
+opens a tab here.
 
 ## How to use
 
@@ -21,85 +21,89 @@ here.
 pnpm add @statewalker/mime.view.pdf
 ```
 
-Boot the fragment (default export, also at `@statewalker/mime.view.pdf/fragment`)
-and import its styles once at app start:
+Peer dependencies: `react` and `react-dom` (`>=18`). Browser only (uses
+`Blob` and `URL.createObjectURL`).
+
+| Import | Provides |
+| --- | --- |
+| `@statewalker/mime.view.pdf` | Catalog and id helpers listed below; default export is the fragment init |
+| `@statewalker/mime.view.pdf/fragment` | Default export: `init(ctx)` returning `() => Promise<void>` |
+| `@statewalker/mime.view.pdf/styles` | Tailwind v4 `@source` globs |
 
 ```ts
-import initPdfViewer from "@statewalker/mime.view.pdf";
 import "@statewalker/mime.view.pdf/styles";
+import init from "@statewalker/mime.view.pdf/fragment";
 
-const cleanup = initPdfViewer(ctx); // ctx → getWorkspace(ctx)
+const cleanup = init(ctx); // after the mime.core, render.core and shell.core logic fragments
 ```
 
-`init` registers the catalog, provides the `application/pdf` renderer, restores
-any `pdf-viewer:` panels from the persisted dock layout, and adds a `FileText`
-dock-tab icon. After that, `files:visualize({ uri })` on a `.pdf` file opens it.
+The init registers the catalog, provides the `application/pdf` renderer, adds a `FileText`
+icon for tabs whose id starts with `pdf-viewer:`, and, each time the workspace
+opens, creates specs for `pdf-viewer:` tabs in the saved layout.
 
 ## Examples
 
-The spec helpers (re-exported for hosts that pre-allocate panels):
+### Open a file
 
 ```ts
-import {
-  PDF_VIEWER_CATALOG_ID, // "pdf-viewer"
-  makePdfSpec,
-  pdfViewerPanelId,
-  pdfViewerSpecId,
-} from "@statewalker/mime.view.pdf";
+import { VisualizeFileCommand } from "@statewalker/mime.core";
 
+await commands.call(VisualizeFileCommand, { uri: "file:///docs/report.pdf" }).promise;
+```
+
+### Build the panel plan yourself
+
+```ts
+import { PDF_VIEWER_CATALOG_ID, makePdfSpec, pdfViewerPanelId, pdfViewerSpecId } from "@statewalker/mime.view.pdf";
+
+const uri = "file:///docs/report.pdf";
 const plan = {
-  catalogId: PDF_VIEWER_CATALOG_ID,
-  spec: makePdfSpec("file:///docs/report.pdf"),
-  panelId: pdfViewerPanelId("file:///docs/report.pdf"),
-  specId: pdfViewerSpecId("file:///docs/report.pdf"),
+  catalogId: PDF_VIEWER_CATALOG_ID, // "pdf-viewer"
+  spec: makePdfSpec(uri),
+  panelId: pdfViewerPanelId(uri),
+  specId: pdfViewerSpecId(uri),
 };
 ```
 
-`PdfView` is internal — `init` binds it to the catalog's `PdfView` component
-type; it is not a public export.
+This is what the registered `MimeRenderer.buildPanel(uri)` returns. Panel
+and spec ids are derived from the URI, so opening the same file again focuses
+the existing tab.
+
+Public exports: `pdfViewerCatalog` (the typed catalog), `PDF_VIEWER_CATALOG_ID`, `makePdfSpec`, `pdfViewerPanelId`, `pdfViewerSpecId`.
+The `PdfView` component itself is not exported.
 
 ## Internals
 
-### Architectural decisions
+### Loading
 
-- **Browser-native viewer.** Rendering delegates to an `<embed type="application/pdf">`,
-  i.e. the browser's built-in PDF viewer. PDF.js is explicitly out of scope for
-  v1 — no rendering engine is bundled.
-- **URI-only spec, deterministic ids.** The spec carries just the URI;
-  `pdfViewerPanelId` / `pdfViewerSpecId` key off it so reopening a file focuses
-  the existing tab.
-- **Layout restore on boot.** `restorePanelSpecsFromLayout` pre-allocates specs
-  for persisted `pdf-viewer:` tabs so DockView's `fromJSON()` finds a spec
-  instead of a missing-panel placeholder when the React tree mounts.
+`PdfView` calls `LoadFileCommand` (`files:load-file`) on mount and keeps a
+loading / ready / error state. A failed load shows `Failed to load file` and
+the error message in the tab. The bytes are wrapped in a `Blob` of type `application/pdf` and passed to the `<embed>` as a `blob:` URL, which is revoked on unmount or when the URI changes.
 
-### Algorithms
+### Why specs are created on workspace open
 
-`PdfView` lazy-loads the file via `LoadFileCommand` (`files:load-file`) on
-mount, wraps the bytes in a `Blob` typed `application/pdf`, and points the
-`<embed>` at the resulting `blob:` URL. The object URL is revoked on unmount or
-URI change. State is a three-way loading / ready / error union.
+The dock restores tabs from the saved layout (read from the `LayoutStore`
+adapter). A restored tab without a spec shows `Spec <specId> is missing.` The
+init therefore creates a spec for every saved `pdf-viewer:` tab when the workspace
+opens. The spec holds only `{ uri }`; the component reads the file itself.
 
 ### Constraints
 
-- Relies on the host browser shipping a PDF viewer; no in-app annotation,
-  search, or page navigation beyond what the browser provides.
-- Requires `globalThis.localStorage` for layout restore and a browser `URL` /
-  `Blob` runtime — this is a browser fragment.
+- No PDF engine is bundled. A browser without a built-in PDF viewer (many mobile browsers, some locked-down setups) shows an empty area or a download prompt instead of the document.
+- Search, annotation and page navigation are whatever the browser's viewer offers.
+- The whole file is read into memory.
 
 ### Dependencies
 
-`@statewalker/mime.core` (`mimeRenderersSlot`), `@json-render/core` +
-`@statewalker/render.core` / `@statewalker/render.view.react` (catalog, specs,
-registry), `@statewalker/shell.view.react` (`dockTabIconSlot`),
-`@statewalker/workspace.core` / `.view.react` (`Workspace`, `LoadFileCommand`,
-`useAppWorkspace`), `@statewalker/ui.view.react`, `lucide-react` (`FileText`),
-`zod`. React 18+ is a peer dependency.
-
-## Related
-
-- `@statewalker/mime.core` — the dispatch core this builds on.
-- `@statewalker/mime.view.image`, `@statewalker/mime.view.markdown`, `@statewalker/mime.view.video` — sibling renderers.
+- `@statewalker/mime.core` — `mimeRenderersSlot`.
+- `@statewalker/render.core`, `@statewalker/render.view.react`, `@json-render/core`, `zod` — catalog, specs, `SpecStore`, `LayoutStore`, `defineRegistry`.
+- `@statewalker/shell.view.react` — `dockTabIconSlot`.
+- `@statewalker/workspace.core` — `LoadFileCommand`, `getWorkspace`.
+- `@statewalker/ui.view.react` — `useAppWorkspace`.
+- `@statewalker/shared-commands`, `@statewalker/shared-slots`, `@statewalker/shared-registry` — fragment wiring.
+- `lucide-react` — the `FileText` icon.
+- `@statewalker/workspace.view.react` — declared but not imported by the source.
 
 ## License
 
-MIT — see the monorepo root `LICENSE`.
+MIT

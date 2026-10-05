@@ -2,11 +2,23 @@
 
 ## What it is
 
-The React renderer for the workbench application shell — the visual half of the dock. It turns the React-free contract in `@statewalker/shell.core` into a concrete UI: `MainShell` (header + resizable side panels + central tabbed dock), `DockViewHost` (the [`dockview-react`](https://dockview.dev/) mount that binds the live api to `DockHost`), `ShellHeader`, the single `"json"` panel that renders specs from `render.core`, the shadcn-styled `LineTab`, and the `dock:tab-icons` slot. It registers `MainShell` as the application root view so the substrate (`ui.view.react`) renders the shell without importing it.
+The React application shell. `MainShell` lays out a header, left and right
+side panels, overlays, and a central [dockview](https://dockview.dev/) area
+with tabs. `DockViewHost` mounts `dockview-react` and binds its API to the
+`DockHost` adapter from `@statewalker/shell.core`, so `dock:*` commands open,
+focus and close real tabs. Every tab renders through a single `json` panel
+kind, which looks up a json-render spec and catalog and renders it with
+`SpecRenderer`.
 
 ## Why it exists
 
-Per ADR 0002, the shell's React tree is a separate package from its logic so that the value carried across the boundary stays declarative. `shell.core` defines `dock:*` commands and slots whose `viewKey` fields are plain strings; this package resolves those keys to React components, owns the `DockviewApi` binding, and supplies the only DockView component kind. The split keeps the `ui.view.react → shell.view.react` edge one-way: the substrate renders whatever sits under `SHELL_ROOT_VIEW_KEY`, and this fragment is what registers `MainShell` there.
+`@statewalker/shell.core` defines the dock commands (`dock:show-panel`,
+`dock:close-panel`, `dock:focus-panel`), the slots that describe the shell
+chrome (`dock:header-items`, `dock:side-panels`, `dock:overlays`) and the
+`DockHost` adapter, all without React. Something has to resolve the
+contributions' `viewKey`s to components, own the dockview instance, and draw
+the frame. This package does that, and registers `MainShell` under
+`shell:root` so `@statewalker/ui.view.react` renders it without importing it.
 
 ## How to use
 
@@ -14,42 +26,30 @@ Per ADR 0002, the shell's React tree is a separate package from its logic so tha
 pnpm add @statewalker/shell.view.react
 ```
 
-The package is a renderer fragment. Its default export (`@statewalker/shell.view.react/fragment`) is an `init(ctx)` that registers `MainShell` into the `core:views` slot under `SHELL_ROOT_VIEW_KEY`. The host app activates it after the logic fragments and imports its stylesheet once at boot:
+Peer dependencies: `react` and `react-dom` (`>=18`).
+
+| Import | Provides |
+| --- | --- |
+| `@statewalker/shell.view.react` | `MainShell`, `DockViewHost`, `dockTabIconSlot`, `DockTabIcon`; default export is the fragment init |
+| `@statewalker/shell.view.react/fragment` | Default export: `init(ctx)` registering `MainShell` into `core:views` under `shell:root` |
+| `@statewalker/shell.view.react/styles` | Tailwind v4 `@source` globs |
+
+The built JS imports `dockview-react/dist/styles/dockview.css` and a local CSS
+file, so the host bundler must handle CSS imports. Browser only.
 
 ```ts
 import "@statewalker/shell.view.react/styles";
+import initShellView from "@statewalker/shell.view.react/fragment";
+
+const cleanup = initShellView(ctx); // after the shell.core logic fragment
 ```
 
-Mounting `MainShell` is also what binds the DockView api to the dock — its `<DockViewHost>` calls `DockHost.setApi` on `onReady`, draining any queued `dock:show-panel` calls.
+Once the workspace is `ready`, `<App/>` from `@statewalker/ui.view.react`
+renders `MainShell`.
 
 ## Examples
 
-### Activating the fragment
-
-```ts
-import initShell from "@statewalker/shell.view.react/fragment";
-
-// During renderer-fragment boot, after ui.view.react and shell.core:
-const cleanup = initShell(ctx); // registers MainShell under SHELL_ROOT_VIEW_KEY
-// ... on teardown:
-cleanup();
-```
-
-Once active and the workspace shell reaches `ready`, the substrate's `<App/>` renders `MainShell` automatically.
-
-### Rendering the host directly (e.g. in a test harness)
-
-```tsx
-import { DockViewHost } from "@statewalker/shell.view.react";
-
-function Harness({ workspace }) {
-  return <DockViewHost workspace={workspace} />;
-}
-```
-
-`DockViewHost` takes the `Workspace` as a prop so it can render anywhere an instance is in scope; the panels it renders read the workspace via `useAppWorkspace()` (React context survives dockview's portal rendering).
-
-### Contributing a per-prefix tab icon
+### Add an icon to tabs whose panel id has a prefix
 
 ```tsx
 import { Slots } from "@statewalker/shared-slots";
@@ -57,52 +57,88 @@ import { dockTabIconSlot } from "@statewalker/shell.view.react";
 import { FileText } from "lucide-react";
 
 const slots = workspace.requireAdapter(Slots);
-slots.provide(dockTabIconSlot, {
-  panelIdPrefix: "file:",        // trailing colon by convention
-  Icon: FileText,                // any component accepting { className }
-});
+const remove = slots.provide(dockTabIconSlot, { panelIdPrefix: "file:", Icon: FileText });
 ```
 
-`LineTab` picks the contribution whose `panelIdPrefix` the panel id starts with (longest prefix wins) and renders it next to the tab title.
+The tab uses the entry with the longest `panelIdPrefix` that the panel id
+starts with, so `"chat:agent:"` wins over `"chat:"`. `Icon` must accept a
+`className` prop.
+
+### Render the dock area alone (for example in a test)
+
+```tsx
+import { DockViewHost } from "@statewalker/shell.view.react";
+
+<DockViewHost workspace={workspace} />;
+```
+
+`DockViewHost` takes the `Workspace` as a prop. The panels inside read it from
+React context (`useAppWorkspace()`), so an `<AppWorkspaceProvider>` must still
+be an ancestor.
 
 ## Internals
 
-### Architectural decisions
+### Layout
 
-- **One DockView component kind: `"json"`.** `DockViewHost` registers exactly `{ json: JsonPanel }`. Every panel — whatever its content — flows through `JsonPanel`, which resolves a `SpecRecord` from `render.core`'s `SpecStore` by `specId`, resolves the catalog from the `catalogs` slot, and renders `<SpecRenderer>` (the single boundary into json-render). Adding panel kinds is done with new specs/catalogs, not new components.
-- **MainShell registered, never imported.** The substrate (`ui.view.react`) does not import the shell; this fragment registers `MainShell` under `SHELL_ROOT_VIEW_KEY` in `core:views`. The dependency edge is one-way (`shell → ui`).
-- **Declarative chrome from slots.** `MainShell` composes itself from `shell.core`'s three slots — `dock:side-panels` (left/right `ResizablePanel`s around the central host), `dock:header-items` (leading/trailing cells in `ShellHeader`), `dock:overlays` (non-layout mounts). Each contribution's `viewKey` is resolved against `core:views` at render time; an unresolved key renders nothing.
-- **Close via command, not `api.close()`.** `LineTab`'s close button and `JsonPanel`'s recovery placeholders dispatch `ClosePanelCommand` rather than calling DockView directly, so the dock's spec-eviction pass runs.
+```
+MainShell
++------------------------------------------------------------+
+| ShellHeader: dock:header-items "leading" ...    "trailing" |
++-----------+-------------------------------+----------------+
+| side      | DockViewHost                  | side           |
+| panels    |  tabs (LineTab)               | panels         |
+| "left"    |  each tab = JsonPanel         | "right"        |
++-----------+-------------------------------+----------------+
+dock:overlays mounted next to the layout (dialogs etc.)
+```
 
-### Algorithms
+Every slot entry carries a `viewKey`; the component is looked up in
+`core:views` at render time. An unknown key renders nothing.
 
-- **Api binding & teardown.** `DockViewHost` captures `event.api` in `onReady` → `DockHost.setApi`, and `DockHost.detach()` on unmount. The host snapshots layout on detach so StrictMode/HMR remounts don't drop panels.
-- **Reactive tab title/active state.** `LineTab` subscribes via `useSyncExternalStore` to `api.onDidTitleChange` / `api.onDidActiveChange`; `JsonPanel` subscribes to `SpecStore.observe(specId)` so a panel re-renders when its spec changes or disappears.
-- **Longest-prefix icon match.** `LineTab` scans `dock:tab-icons`, keeping the entry with the longest `panelIdPrefix` that the panel id starts with, so a specific prefix (`"chat:agent:"`) overrides a broad one (`"chat:"`).
+### One panel kind: `json`
 
-### Constraints
+`DockViewHost` registers exactly `{ json: JsonPanel }`. A tab's content comes
+from a `SpecRecord` in `SpecStore` (by `specId`) and the registry stored under
+its `catalogId` in the `json:catalogs` slot. New kinds of tabs are added with
+new specs and catalogs, not new dockview components. `JsonPanel` re-renders
+when its spec changes.
 
-- The shell renders only once the workspace shell status is `ready`; before that the substrate shows the directory-picker empty state.
-- `JsonPanel` shows a self-contained recovery placeholder (with a close button) when the spec or its catalog is missing rather than throwing.
-- React-only: contributions to `dock:tab-icons` carry components, so that slot lives here rather than in `shell.core` (which must stay React-free).
+What you see when something is missing:
+
+- `Spec <specId> is missing.` with a "Close panel" button — the tab was
+  restored from a saved layout but no spec was created for it.
+- `Catalog <catalogId> is not registered.` — the view fragment that owns the
+  catalog was not activated.
+
+`JsonPanel` renders `SpecRenderer` without `handlers`. Actions dispatched by a
+spec in a dock tab therefore log `No handler registered for action: ...` and
+do nothing; components that need to act should call commands themselves.
+
+### Closing goes through the command bus
+
+The tab close button and the placeholders' "Close panel" call
+`ClosePanelCommand` (`dock:close-panel`) instead of dockview's
+`api.close()`, so the logic side can drop the panel's spec.
+
+### API binding
+
+`DockViewHost` calls `DockHost.setApi(api)` in dockview's `onReady` and
+`DockHost.detach()` on unmount. `dock:show-panel` calls made before the shell
+mounts are handled by `DockHost` once the API arrives.
 
 ### Dependencies
 
-- `dockview-react` (pinned `6.0.3`) — the dock host, panel api, and tab header types.
-- `@statewalker/shell.core` — the `dock:*` commands, the three chrome slots, and the `DockHost` adapter this renderer drives.
-- `@statewalker/ui.view.react` — `SHELL_ROOT_VIEW_KEY`, `coreViewsSlot`, and the hooks (`useAdapter`, `useSlot`, `useKeyedSlot`, `useAppWorkspace`, `compareByOrderAndId`).
-- `@statewalker/ui.view.shadcn` — `ResizablePanel*` for the side-panel layout and `cn()` for `LineTab` styling.
-- `@statewalker/render.core` + `@statewalker/render.view.react` — `SpecStore`, the catalogs slot, and `SpecRenderer` for `JsonPanel`.
-- `@statewalker/workspace.view.react` — re-used renderer surfaces from the workspace fragment.
-- `lucide-react` — the tab close (`X`) icon.
+- `dockview-react` — the dock.
+- `@statewalker/shell.core` — commands, chrome slots, `DockHost`.
+- `@statewalker/render.core`, `@statewalker/render.view.react` — `SpecStore`, `json:catalogs`, `SpecRenderer`.
+- `@statewalker/ui.view.react` — `core:views`, `shell:root`, hooks.
+- `@statewalker/ui.view.shadcn` — resizable panels, `cn()`.
+- `@statewalker/shared-commands`, `@statewalker/shared-slots`, `@statewalker/shared-registry`, `@statewalker/workspace.core` — fragment wiring.
+- `lucide-react` — the tab close icon.
 
-## Related
-
-- `@statewalker/shell.core` — the logic half: `dock:*` commands, slots, and the `DockHost` adapter.
-- `@statewalker/ui.view.react` — the substrate that renders this shell under `SHELL_ROOT_VIEW_KEY`.
-- `@statewalker/ui.view.shadcn` — the resizable-panel and styling primitives used here.
-- `@statewalker/render.view.react` — `SpecRenderer`, the json-render boundary `JsonPanel` uses.
+`dock:tab-icons` lives here, not in `shell.core`, because its values are React
+components.
 
 ## License
 
-MIT — see the monorepo root `LICENSE`.
+MIT

@@ -3,7 +3,7 @@
   "version": "0.2.1",
   "private": false,
   "type": "module",
-  "description": "Workspace-bridge renderer fragment: AppWorkspaceProvider, DirectoryPickerEmptyState, ReconnectBanner, switch-workspace header item.",
+  "description": "Workspace renderer fragment: workspace label header item and switch-workspace button.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/statewalker/statewalker-shell-react.git",

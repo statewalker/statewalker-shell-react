@@ -2,22 +2,21 @@
 
 ## What it is
 
-The single `@json-render/react` boundary for the workbench substrate. It
-exports `<SpecRenderer>` — a thin wrapper that renders a json-render `spec`
-against a `registry` inside a `<JSONUIProvider>` — plus a re-export of
-json-render's `defineRegistry`, `schema`, and state hooks so renderer
-fragments build catalogs and author custom component bindings without
-importing `@json-render/react` directly.
+The package where json-render specs become React elements. It exports
+`<SpecRenderer>`, which renders a json-render `spec` against a `registry`
+inside a `<JSONUIProvider>`, and re-exports `@json-render/react`'s
+`defineRegistry`, `schema` and state hooks so view packages can build
+catalogs and component bindings without importing `@json-render/react`
+themselves.
 
 ## Why it exists
 
-`@statewalker/render.core` holds json-render
-specs and catalog registries **opaquely** (`unknown`) so the rest of the
-workbench stays free of json-render and React (ADR-0002 logic/view split).
-The concrete json-render types have to surface *somewhere* to actually
-render — this package is that one place. Centralizing the boundary means
-exactly one module depends on `@json-render/core` and `@json-render/react`,
-and every renderer fragment goes through it.
+`@statewalker/render.core` stores specs (in the `SpecStore`) and registries
+(in the `json:catalogs` slot) as opaque `unknown` values, so logic packages
+depend on neither json-render nor React. The concrete json-render types have
+to appear somewhere for anything to render. This package is that place: one
+file casts the opaque values to json-render types, and every other view
+package goes through it.
 
 ## How to use
 
@@ -25,84 +24,90 @@ and every renderer fragment goes through it.
 pnpm add @statewalker/render.view.react
 ```
 
-`react` / `react-dom` (>=18) are peer dependencies.
+Peer dependencies: `react` and `react-dom` (`>=18`).
+
+| Import | Provides |
+| --- | --- |
+| `@statewalker/render.view.react` | `SpecRenderer`, `SpecRendererProps`, re-exports from `@json-render/react` |
+
+There is no `./fragment` and no `./styles` entry: the package registers nothing.
 
 ```tsx
 import { SpecRenderer } from "@statewalker/render.view.react";
 
-function JsonPanel({ record, registry }) {
-  return <SpecRenderer spec={record.spec} registry={registry} />;
-}
+<SpecRenderer spec={record.spec} registry={registry} />;
 ```
 
-`spec` and `registry` are typed `unknown` to match the opaque values from
-the `SpecStore` and the `json:catalogs` slot. Pass an optional external
-json-render `store` when the spec is state-driven and an outside projection
-needs to seed/update it; omit it for self-contained single-component specs
-(`<JSONUIProvider>` then manages its own internal store).
+`SpecRendererProps`:
+
+- `spec: unknown` — a json-render spec, as held by the `SpecStore`.
+- `registry: unknown` — a json-render registry, as held by the `json:catalogs` slot.
+- `store?: unknown` — an external json-render `StateStore`. Pass one when code
+  outside the spec must seed or update the state the spec reads. When omitted,
+  `<JSONUIProvider>` creates its own store, which is enough for self-contained
+  specs.
+- `handlers?: unknown` — the action handlers,
+  `{ [actionName]: (params) => void | Promise<void> }`.
 
 ## Examples
 
-### Building a registry and rendering against it
+### Define a catalog, bind it, render a spec
 
 ```tsx
+import { defineCatalog } from "@json-render/core";
 import { defineRegistry, schema, SpecRenderer } from "@statewalker/render.view.react";
+import { z } from "zod";
 
-const { registry } = defineRegistry({
-  // component bindings keyed by spec `type`, using `schema` for props
+const catalog = defineCatalog(schema, {
+  components: { Hello: { props: z.object({ name: z.string() }) } },
+  actions: {},
 });
 
-<SpecRenderer spec={mySpec} registry={registry} />;
+const { registry } = defineRegistry(catalog, {
+  components: { Hello: ({ props }) => <p>Hello, {props.name}</p> },
+  actions: {},
+});
+
+<SpecRenderer spec={spec} registry={registry} />;
 ```
 
-### Authoring a state-bound component binding
-
-The re-exported hooks let renderer fragments build two-way / state-path
-bindings through this boundary instead of importing `@json-render/react`:
+### Bind a component to spec state
 
 ```tsx
 import { useBoundProp, useStateValue } from "@statewalker/render.view.react";
-
-function Field(props) {
-  const [value, setValue] = useBoundProp(props, "value");
-  const count = useStateValue("path.to.count");
-  // ...
-}
 ```
+
+These are the `@json-render/react` hooks, re-exported unchanged.
 
 ## Internals
 
-### Architectural decisions
+### Actions do nothing without `handlers`
 
-- **Sole boundary.** This is the only workbench module that imports
-  `@json-render/core` / `@json-render/react`. Everything upstream
-  (`render.core`, the dock fragment, logic fragments) stays json-render-free.
-- **`unknown` at the seam.** `SpecRendererProps.spec` / `registry` / `store`
-  are `unknown`; the component casts to `any` internally (with linter
-  suppressions) precisely because the real types are deliberately hidden in
-  the opaque stores. This contains the cast to one file.
-- **`<JSONUIProvider>` + `<Renderer>`.** The provider sets up the
-  visibility / validation / state contexts that `<Renderer>`'s internals
-  read from; both are needed for a spec to render correctly.
+json-render's `ActionProvider` resolves action handlers from the `handlers`
+prop, not from the action schemas in the registry. A spec whose elements
+dispatch `on.<event>` actions but is rendered without `handlers` logs
+`No handler registered` and the click has no effect.
 
-### Constraints
+### Why both `<JSONUIProvider>` and `<Renderer>`
 
-Tiny by design — one component plus re-exports. Renderer fragments should
-import json-render symbols from here, not from `@json-render/react`
-directly, to keep the boundary single.
+`<Renderer>` reads the visibility, validation and state contexts that
+`<JSONUIProvider>` sets up. A spec rendered without the provider does not
+render correctly, so `SpecRenderer` always wraps one.
+
+### Why the props are `unknown`
+
+The stores hold specs and registries opaquely. `SpecRenderer` casts them to
+`any` in one place (with lint suppressions), so the casts do not spread into
+other packages.
 
 ### Dependencies
 
-- `@json-render/core`, `@json-render/react` (0.18.0) — the rendering engine
-  this package wraps.
-- `react` / `react-dom` (>=18) — peer dependencies.
+- `@json-render/core`, `@json-render/react` — the rendering engine this package wraps.
+- `react`, `react-dom` — peers.
 
-## Related
-
-- `@statewalker/render.core` — the React-free
-  state layer (`SpecStore`, `spec:*` commands, `json:catalogs` slot) whose
-  opaque specs and registries this renderer consumes.
+Used by `@statewalker/shell.view.react` (its `json` dock panel) and by the
+catalog bindings in the other view packages.
 
 ## License
 
-MIT — see the monorepo root `LICENSE`.
+MIT

@@ -2,19 +2,19 @@
 
 ## What it is
 
-The React renderer fragment for Markdown files. It contributes a `text/markdown`
-`MimeRenderer` to the `files:mime-renderers` slot of
-`@statewalker/mime.core`, registers the
-`markdown-viewer` json-render catalog, and binds the `MarkdownView` component
-that loads a file, decodes it to text, and renders it with the shared
-`Markdown` component in a dock panel.
+A view fragment that opens Markdown files in a dock tab, plus the `<Markdown>`
+component it renders them with. The fragment adds a `MimeRenderer` for
+`text/markdown` to the `files:mime-renderers` slot of `@statewalker/mime.core`
+and registers the `markdown-viewer` json-render catalog. `<Markdown>` renders
+a Markdown string with GitHub-flavored Markdown, line breaks kept, and
+syntax-highlighted code blocks.
 
 ## Why it exists
 
-`mime.core` dispatches a URI to whichever renderer claims its MIME type but
-holds no React and no concrete viewer. This package is the Markdown half of that
-split (ADR-0002). Opening a `text/markdown` file via `files:visualize` lands
-here, where the bytes are decoded and rendered as formatted prose.
+`@statewalker/mime.core` sends a file URI to whichever renderer claims its
+MIME type, but contains no viewers. This package is the Markdown viewer. The
+`<Markdown>` component is exported so other views (for example chat output)
+render Markdown the same way as files.
 
 ## How to use
 
@@ -22,91 +22,116 @@ here, where the bytes are decoded and rendered as formatted prose.
 pnpm add @statewalker/mime.view.markdown
 ```
 
-Boot the fragment (default export, also at
-`@statewalker/mime.view.markdown/fragment`) and import its styles once at app
-start:
+Peer dependencies: `react` and `react-dom` (`>=18`).
+
+| Import | Provides |
+| --- | --- |
+| `@statewalker/mime.view.markdown` | `Markdown`, `MarkdownProps`, the catalog and id helpers; default export is the fragment init |
+| `@statewalker/mime.view.markdown/fragment` | Default export: `init(ctx)` returning `() => Promise<void>` |
+| `@statewalker/mime.view.markdown/styles` | Tailwind v4 `@source` globs |
 
 ```ts
-import initMarkdownViewer from "@statewalker/mime.view.markdown";
 import "@statewalker/mime.view.markdown/styles";
+import initMarkdownViewer from "@statewalker/mime.view.markdown/fragment";
 
-const cleanup = initMarkdownViewer(ctx); // ctx → getWorkspace(ctx)
+const cleanup = initMarkdownViewer(ctx); // after the mime.core, render.core and shell.core logic fragments
 ```
 
-`init` registers the catalog, provides the `text/markdown` renderer, restores
-any `markdown-viewer:` panels from the persisted dock layout, and adds a
-`FileText` dock-tab icon. After that, `files:visualize({ uri })` on a `.md` file
-opens it.
+The init registers the catalog, provides the `text/markdown` renderer, adds a
+`FileText` icon for tabs whose id starts with `markdown-viewer:`, and, each
+time the workspace opens, creates specs for `markdown-viewer:` tabs in the
+saved layout.
 
 ## Examples
 
-The spec helpers (re-exported for hosts that pre-allocate panels):
+### Render a Markdown string
+
+```tsx
+import { Markdown } from "@statewalker/mime.view.markdown";
+
+<Markdown className="prose prose-sm">{"# Title\n\n- one\n- two\n\n```ts\nconst x = 1;\n```"}</Markdown>;
+```
+
+`MarkdownProps`:
+
+- `children: string` — the Markdown source.
+- `id?: string` — prefix for block keys; a `useId()` value by default.
+- `className?: string` — class of the wrapping `<div>`.
+- `components?: Partial<Components>` — `react-markdown` component overrides,
+  merged over the built-in `code` and `pre`.
+- `remarkPlugins?: PluggableList` — added after `remark-gfm` and `remark-breaks`.
+- `urlTransform?: UrlTransform` — passed to `react-markdown`; its default
+  applies when omitted.
+
+### Open a file
+
+```ts
+import { VisualizeFileCommand } from "@statewalker/mime.core";
+
+await commands.call(VisualizeFileCommand, { uri: "file:///docs/readme.md" }).promise;
+```
+
+### Build the panel plan yourself
 
 ```ts
 import {
-  MARKDOWN_VIEWER_CATALOG_ID, // "markdown-viewer"
+  MARKDOWN_VIEWER_CATALOG_ID,
   makeMarkdownSpec,
   markdownViewerPanelId,
   markdownViewerSpecId,
 } from "@statewalker/mime.view.markdown";
 
+const uri = "file:///docs/readme.md";
 const plan = {
-  catalogId: MARKDOWN_VIEWER_CATALOG_ID,
-  spec: makeMarkdownSpec("file:///docs/readme.md"),
-  panelId: markdownViewerPanelId("file:///docs/readme.md"),
-  specId: markdownViewerSpecId("file:///docs/readme.md"),
+  catalogId: MARKDOWN_VIEWER_CATALOG_ID, // "markdown-viewer"
+  spec: makeMarkdownSpec(uri),
+  panelId: markdownViewerPanelId(uri),
+  specId: markdownViewerSpecId(uri),
 };
 ```
 
-`MarkdownView` is internal — `init` binds it to the catalog's `MarkdownView`
-component type; it is not a public export.
+This is what the registered `MimeRenderer.buildPanel(uri)` returns. Ids are
+derived from the URI, so opening the same file again focuses the existing tab.
+`markdownViewerCatalog` (the typed catalog) is exported too.
 
 ## Internals
 
-### Architectural decisions
+### Why the text is split into blocks
 
-- **Renderer-only fragment.** The paired logic fragment was dropped; the inert
-  `text/markdown` MIME-pattern data lives inline in `init`, registered alongside
-  the catalog binding.
-- **Reuse the chat Markdown renderer.** Rendering delegates to `Markdown` from
-  `@repo/chat-mini.chat-react`, so Markdown styling stays consistent with chat
-  output rather than duplicating a parser.
-- **URI-only spec.** The spec carries just the URI; the component fetches the
-  text itself, keeping `SpecStore` patches cheap and ids deterministic so
-  reopening a file focuses the existing tab.
-- **Layout restore on boot.** `restorePanelSpecsFromLayout` pre-allocates specs
-  for persisted `markdown-viewer:` tabs so DockView's `fromJSON()` finds them.
+`<Markdown>` splits the source into top-level blocks with `marked.lexer` and
+renders each block with a memoized `react-markdown` instance. When the text
+grows (for example while a chat answer streams in), the text is split again,
+but only blocks whose text changed go through `react-markdown` again.
 
-### Algorithms
+### Code blocks
 
-`MarkdownView` lazy-loads the file via `LoadFileCommand` (`files:load-file`) on
-mount, decodes the bytes with `TextDecoder`, and renders the string through
-`<Markdown>` inside a `prose` container. State is a three-way
-loading / ready / error union; the effect cancels cleanly on unmount or URI
-change.
+Fenced code is highlighted with `shiki` (`codeToHtml`, theme `github-light`)
+asynchronously, after the first render. The language comes from the
+`language-*` class; without one, `plaintext`. Inline code (a code element that
+starts and ends on the same line) is a styled `<span>`. The theme does not
+change in dark mode.
 
-### Constraints
+### File tabs
 
-- Renders Markdown as decoded UTF-8 text; raw bytes are not validated as
-  Markdown.
-- Requires `globalThis.localStorage` for layout restore — this is a browser
-  fragment.
+`MarkdownView` calls `LoadFileCommand` (`files:load-file`), decodes the bytes
+as UTF-8 with `TextDecoder`, and renders them inside a `prose` container. A
+failed load shows `Failed to load file` and the error message. The dock
+restores tabs from the saved layout (read from the `LayoutStore` adapter); a
+restored tab without a spec would show `Spec <specId> is missing.`, so the init
+creates specs for saved `markdown-viewer:` tabs when the workspace opens.
 
 ### Dependencies
 
-`@statewalker/mime.core` (`mimeRenderersSlot`), `@repo/chat-mini.chat-react`
-(`Markdown`), `@json-render/core` + `@statewalker/render.core` /
-`@statewalker/render.view.react` (catalog, specs, registry),
-`@statewalker/shell.view.react` (`dockTabIconSlot`),
-`@statewalker/workspace.core` / `.view.react` (`Workspace`, `LoadFileCommand`,
-`useAppWorkspace`), `@statewalker/ui.view.react`, `lucide-react` (`FileText`),
-`zod`. React 18+ is a peer dependency.
-
-## Related
-
-- `@statewalker/mime.core` — the dispatch core this builds on.
-- `@statewalker/mime.view.image`, `@statewalker/mime.view.pdf`, `@statewalker/mime.view.video` — sibling renderers.
+- `react-markdown`, `remark-gfm`, `remark-breaks`, `marked`, `shiki` — parsing, rendering, highlighting.
+- `@statewalker/mime.core` — `mimeRenderersSlot`.
+- `@statewalker/render.core`, `@statewalker/render.view.react`, `@json-render/core`, `zod` — catalog, specs, `SpecStore`, `LayoutStore`.
+- `@statewalker/shell.view.react` — `dockTabIconSlot`.
+- `@statewalker/workspace.core` — `LoadFileCommand`, `getWorkspace`.
+- `@statewalker/ui.view.react`, `@statewalker/ui.view.shadcn` — `useAppWorkspace`, `cn()`.
+- `@statewalker/shared-commands`, `@statewalker/shared-slots`, `@statewalker/shared-registry` — fragment wiring.
+- `lucide-react` — the `FileText` icon.
+- `@statewalker/workspace.view.react` — declared but not imported by the source.
 
 ## License
 
-MIT — see the monorepo root `LICENSE`.
+MIT

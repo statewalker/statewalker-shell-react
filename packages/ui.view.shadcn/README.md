@@ -2,11 +2,17 @@
 
 ## What it is
 
-The workbench's [shadcn/ui](https://ui.shadcn.com/) primitive library: a vendored set of Radix-backed React components (Button, Dialog, AlertDialog, Card, Tabs, Select, Input, Textarea, Label, Separator, ScrollArea, Collapsible, Tooltip, Avatar, and the `react-resizable-panels` wrapper `Resizable*`) plus the `cn()` class-merging helper. It is a renderer-only fragment with no logic counterpart — it owns no slots or commands; its job is to encapsulate the vendor UI substrate as a package the other renderer fragments import primitives from.
+A packaged set of [shadcn/ui](https://ui.shadcn.com/) components (Radix-based
+React primitives: Button, Dialog, AlertDialog, Card, Tabs, Select, Input,
+Textarea, Label, Separator, ScrollArea, Collapsible, Tooltip, Avatar and the
+`Resizable*` panel wrappers) plus the `cn()` class-merging helper.
 
 ## Why it exists
 
-shadcn/ui components are normally copied into an app's `src/components/ui` directory. In the workbench they live in their own package so the primitives are a single shared substrate rather than a free-floating folder duplicated per app, and so they fit the fragment model required by ADR 0002. Component colors come entirely from CSS variables (`--primary`, `--muted`, `--ring`, …) that are defined in `@statewalker/ui.view.react`'s stylesheet, so this library themes automatically with the substrate and switches with its `.dark` variant.
+shadcn/ui components are normally copied into each app's
+`src/components/ui`. Here they are one package, so every view package in the
+shell imports the same primitives and a fix lands everywhere at once. The
+package owns no slots and no commands.
 
 ## How to use
 
@@ -14,106 +20,127 @@ shadcn/ui components are normally copied into an app's `src/components/ui` direc
 pnpm add @statewalker/ui.view.shadcn
 ```
 
-Import primitives and the `cn()` helper from the package root; import the stylesheet once at boot so Tailwind v4 discovers the classes used inside the package.
+Peer dependencies: `react` and `react-dom` (`>=18`). The host needs Tailwind v4.
+
+| Import | Provides |
+| --- | --- |
+| `@statewalker/ui.view.shadcn` | The components and `cn()`; the default export is the fragment init |
+| `@statewalker/ui.view.shadcn/fragment` | Default export: an `init(ctx)` that does nothing and returns a no-op cleanup |
+| `@statewalker/ui.view.shadcn/styles` | `src/styles.css`: Tailwind v4 `@source` globs for the classes used in this package |
+
+Import the stylesheets once at boot. The theme variables come from
+`@statewalker/ui.view.react`:
 
 ```ts
+import "@statewalker/ui.view.react/styles";
 import "@statewalker/ui.view.shadcn/styles";
 ```
 
-```tsx
-import { Button, Dialog, DialogContent, DialogTrigger, cn } from "@statewalker/ui.view.shadcn";
-```
-
-The default export (`@statewalker/ui.view.shadcn/fragment`) is a **no-op** `init` — the fragment exists only to package the substrate; activating it has no runtime effect.
-
 ## Examples
 
-### Buttons with variants and sizes
-
-```tsx
-import { Button } from "@statewalker/ui.view.shadcn";
-
-<Button variant="default">Save</Button>
-<Button variant="outline" size="sm">Cancel</Button>
-<Button variant="ghost" size="icon-sm" aria-label="Close">
-  <X />
-</Button>
-```
-
-`buttonVariants` are `class-variance-authority` variants: `variant` ∈ `default | destructive | outline | secondary | ghost | link`; `size` ∈ `default | xs | sm | lg | icon | icon-xs | icon-sm | icon-lg`. `asChild` renders through a Radix `Slot` so the styling applies to a child element (e.g. an `<a>`).
-
-### A dialog
+### Button and Dialog
 
 ```tsx
 import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@statewalker/ui.view.shadcn";
 
 <Dialog>
-  <DialogTrigger asChild><Button>Open</Button></DialogTrigger>
+  <DialogTrigger asChild>
+    <Button variant="outline" size="sm">Open</Button>
+  </DialogTrigger>
   <DialogContent>
-    <DialogHeader><DialogTitle>Settings</DialogTitle></DialogHeader>
-    {/* body */}
+    <DialogHeader>
+      <DialogTitle>Settings</DialogTitle>
+    </DialogHeader>
   </DialogContent>
-</Dialog>
+</Dialog>;
 ```
+
+`buttonVariants` (`class-variance-authority`): `variant` is one of
+`default | destructive | outline | secondary | ghost | link`; `size` is one of
+`default | xs | sm | lg | icon | icon-xs | icon-sm | icon-lg`. `asChild`
+renders through a Radix `Slot`.
 
 ### Resizable panels
 
 ```tsx
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@statewalker/ui.view.shadcn";
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@statewalker/ui.view.shadcn";
 
 <ResizablePanelGroup orientation="horizontal">
-  <ResizablePanel defaultSize="20%" minSize="180px"><Sidebar /></ResizablePanel>
+  <ResizablePanel defaultSize="20%" minSize="180px">{sidebar}</ResizablePanel>
   <ResizableHandle />
-  <ResizablePanel><Main /></ResizablePanel>
-</ResizablePanelGroup>
+  <ResizablePanel>{main}</ResizablePanel>
+</ResizablePanelGroup>;
 ```
 
-These wrap `react-resizable-panels` and are the primitives the shell's `MainShell` composes its side panels from. Sizes accept the underlying library's units.
+`ResizablePanelGroup` wraps `react-resizable-panels`' `Group`,
+`ResizablePanel` is its `Panel`, `ResizableHandle` wraps its `Separator`.
+Props are the library's (v4).
 
 ### `cn()`
 
 ```ts
 import { cn } from "@statewalker/ui.view.shadcn";
 
-cn("px-2 py-1", isActive && "bg-background", "px-3"); // → "py-1 bg-background px-3"
+cn("px-2 py-1", isActive && "bg-background", "px-3"); // "py-1 bg-background px-3"
 ```
 
-`cn` is `twMerge(clsx(...))`: `clsx` resolves conditionals, `tailwind-merge` deduplicates conflicting Tailwind utilities (last wins).
+`cn` is `twMerge(clsx(...))`: `clsx` resolves conditionals, `tailwind-merge`
+drops conflicting utilities so the last one wins.
+
+### Full export list
+
+`cn`; `AlertDialog`, `AlertDialogAction`, `AlertDialogCancel`,
+`AlertDialogContent`, `AlertDialogDescription`, `AlertDialogFooter`,
+`AlertDialogHeader`, `AlertDialogOverlay`, `AlertDialogPortal`,
+`AlertDialogTitle`, `AlertDialogTrigger`; `Avatar`, `AvatarFallback`,
+`AvatarImage`; `Button`, `buttonVariants`; `Card`, `CardContent`,
+`CardDescription`, `CardFooter`, `CardHeader`, `CardTitle`; `Collapsible`,
+`CollapsibleContent`, `CollapsibleTrigger`; `Dialog`, `DialogClose`,
+`DialogContent`, `DialogDescription`, `DialogFooter`, `DialogHeader`,
+`DialogOverlay`, `DialogPortal`, `DialogTitle`, `DialogTrigger`; `Input`;
+`Label`; `ResizableHandle`, `ResizablePanel`, `ResizablePanelGroup`;
+`ScrollArea`, `ScrollBar`; `Select`, `SelectContent`, `SelectGroup`,
+`SelectItem`, `SelectLabel`, `SelectScrollDownButton`, `SelectScrollUpButton`,
+`SelectSeparator`, `SelectTrigger`, `SelectValue`; `Separator`; `Tabs`,
+`TabsContent`, `TabsList`, `TabsTrigger`; `Textarea`; `Tooltip`,
+`TooltipContent`, `TooltipProvider`, `TooltipTrigger`.
 
 ## Internals
 
-### Architectural decisions
+### Components are colorless without the substrate theme
 
-- **Vendor substrate as a fragment.** The library is a package with a no-op `init` purely so the shadcn primitives are encapsulated per ADR 0002 instead of living as a loose `src/components` directory. It contributes nothing to the workspace at runtime.
-- **Theme by CSS variable, not by prop.** Components reference semantic color tokens (`bg-primary`, `text-muted-foreground`, `border`, `ring`). The token *values* live in `ui.view.react`'s stylesheet, so theming and dark mode are owned by the substrate and apply uniformly.
-- **Standard shadcn surface, lightly extended.** Components track upstream shadcn/ui; the notable local extension is the extra `Button` sizes (`xs`, `icon-xs`, `icon-sm`, `icon-lg`) used by the workbench's dense chrome (e.g. dock tabs).
+Components use semantic tokens (`bg-primary`, `text-muted-foreground`,
+`border`, `ring`). Their values are CSS variables defined in
+`@statewalker/ui.view.react/styles`, not here. Without that stylesheet the
+components render, but with no colors, borders or focus rings.
 
-### Algorithms
+### Classes missing from the host CSS
 
-None of note — these are presentational primitives. The only shared logic is `cn()` (clsx + tailwind-merge).
+Tailwind v4 only emits classes it finds in scanned sources. If the host does
+not import `@statewalker/ui.view.shadcn/styles` (or otherwise add an `@source`
+for this package), components appear unstyled even though the theme is loaded.
 
-### Constraints
+### Local extensions
 
-- Requires Tailwind v4 in the host with the substrate stylesheet imported; the package's own `styles.css` only declares `@source` globs for content discovery and carries no token definitions of its own.
-- Components are unstyled without `ui.view.react`'s CSS variables in scope — they assume the substrate theme is present.
-- React-only; `react` / `react-dom` are peer dependencies (`>=18`).
+The components follow upstream shadcn/ui. The extra `Button` sizes `xs`,
+`icon-xs`, `icon-sm`, `icon-lg` are added for dense UI such as dock tabs.
 
 ### Dependencies
 
-- `@radix-ui/*` and `radix-ui` — the unstyled, accessible behavior under each primitive (dialog, select, tabs, tooltip, scroll-area, separator, label, alert-dialog).
+- `@radix-ui/*`, `radix-ui` — accessible behavior behind each primitive.
 - `react-resizable-panels` — the `Resizable*` wrappers.
-- `class-variance-authority` — variant definitions (`buttonVariants`, etc.).
-- `clsx` + `tailwind-merge` — the `cn()` helper.
-- `lucide-react` — icons used inside some primitives.
-- `@statewalker/shared-registry` — present for fragment conformance; the components themselves are framework-agnostic.
-
-## Related
-
-- `@statewalker/ui.view.react` — the substrate that defines the CSS-variable theme these primitives consume and provides the React mount/hooks.
-- `@statewalker/shell.view.react` — a primary consumer (resizable panels for `MainShell`, `cn()` for `LineTab`).
+- `class-variance-authority` — `buttonVariants` and other variants.
+- `clsx`, `tailwind-merge` — `cn()`.
+- `lucide-react` — icons inside some primitives.
+- `@statewalker/shared-registry` — declared but not imported by the source.
 
 ## License
 
-MIT — see the monorepo root `LICENSE`.
+MIT
