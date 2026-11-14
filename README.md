@@ -156,11 +156,12 @@ Everything else comes from the pnpm catalog in `pnpm-workspace.yaml`
 ### Releases
 
 Packages are published to npm from CI with changesets, on every merge to `main`.
-After CI passes, the `release` job of `.github/workflows/ci.yml` adds a patch
-changeset for each package whose packed contents differ from npm, applies the
-changesets and pushes the "chore: version packages" commit; the `publish` job then
-publishes what npm lacks, with trusted publishing and provenance. Add your own changeset with `pnpm changeset` to choose the bump or
-the changelog text. Dependency updates come from Renovate.
+After CI passes, the `release` job of `.github/workflows/ci.yml` adds a changeset
+for each package whose packed contents differ from npm (a patch, or a minor on 0.x
+when a dependency moved to another breaking line), applies the changesets and
+pushes the "chore: version packages" commit; the `publish` job then publishes what
+npm lacks, with trusted publishing and provenance. Add your own changeset with
+`pnpm changeset` to choose the bump or the changelog text. Dependency updates come from Renovate.
 
 ### License
 
