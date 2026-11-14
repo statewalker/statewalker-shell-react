@@ -161,7 +161,8 @@ for each package whose packed contents differ from npm (a patch, or a minor on 0
 when a dependency moved to another breaking line), applies the changesets and
 pushes the "chore: version packages" commit; the `publish` job then publishes what
 npm lacks, with trusted publishing and provenance. Add your own changeset with
-`pnpm changeset` to choose the bump or the changelog text. Dependency updates come from Renovate.
+`pnpm changeset` to choose the bump or the changelog text. Dependency updates come
+from Renovate.
 
 ### License
 
