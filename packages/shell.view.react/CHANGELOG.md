@@ -1,5 +1,11 @@
 # @statewalker/shell.view.react
 
+## 0.3.1
+
+### Patch Changes
+
+- 3d5c612: Ship `dist/internal/dock-view-host.d.css.ts`, so the CSS import kept in `dist/public/dock-view-host.d.ts` resolves for TypeScript consumers (attw's InternalResolutionError).
+
 ## 0.3.0
 
 ### Minor Changes
