@@ -1,5 +1,22 @@
 # @statewalker/shell.view.react
 
+## 0.3.0
+
+### Minor Changes
+
+- Release of the changes since the last published version:
+  
+  - @statewalker/render.core ^0.5.0 -> ^0.7.0
+  - @statewalker/shell.core ^0.5.0 -> ^0.7.0
+  - @statewalker/workspace.core ^0.5.0 -> ^0.7.0
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - @statewalker/ui.view.react@0.3.0
+  - @statewalker/workspace.view.react@0.3.0
+
 ## 0.2.2
 
 ### Patch Changes
