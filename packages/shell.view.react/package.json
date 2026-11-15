@@ -1,6 +1,6 @@
 {
   "name": "@statewalker/shell.view.react",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "private": false,
   "type": "module",
   "description": "Dock renderer fragment: dockview-react host, MainShell, ShellHeader, JsonPanel.",

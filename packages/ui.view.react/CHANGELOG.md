@@ -1,5 +1,14 @@
 # @statewalker/ui.view.react
 
+## 0.3.0
+
+### Minor Changes
+
+- Release of the changes since the last published version:
+  
+  - @statewalker/workspace.core ^0.5.0 -> ^0.7.0
+  - @statewalker/workspace.browser ^0.5.0 -> ^0.7.0
+
 ## 0.2.2
 
 ### Patch Changes
