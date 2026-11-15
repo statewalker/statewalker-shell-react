@@ -10,5 +10,8 @@ export default defineConfig({
   // `.js` / `.d.ts` to match the `exports` of package.json.
   outExtensions: () => ({ js: ".js", dts: ".d.ts" }),
   external: [/\.css$/],
-  copy: [{ from: "src/**/*.css", to: "dist", flatten: false }],
+  copy: [
+    { from: "src/**/*.css", to: "dist", flatten: false },
+    { from: "src/**/*.d.css.ts", to: "dist", flatten: false },
+  ],
 });
