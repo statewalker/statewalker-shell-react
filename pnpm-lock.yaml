@@ -43,26 +43,26 @@ catalogs:
       specifier: ^1.1.21
       version: 1.1.21
     '@statewalker/ai-config.core':
-      specifier: ^0.5.0
-      version: 0.5.2
+      specifier: ^0.6.0
+      version: 0.6.0
     '@statewalker/ai-local-models.core':
-      specifier: ^0.5.0
-      version: 0.5.2
+      specifier: ^0.6.0
+      version: 0.6.1
     '@statewalker/explorer.core':
-      specifier: ^0.5.0
-      version: 0.5.2
+      specifier: ^0.7.0
+      version: 0.7.0
     '@statewalker/inline.core':
       specifier: ^0.4.0
       version: 0.4.2
     '@statewalker/mime.core':
-      specifier: ^0.5.0
-      version: 0.5.2
+      specifier: ^0.7.0
+      version: 0.7.0
     '@statewalker/render.core':
-      specifier: ^0.5.0
-      version: 0.5.2
+      specifier: ^0.7.0
+      version: 0.7.0
     '@statewalker/settings.core':
-      specifier: ^0.5.0
-      version: 0.5.2
+      specifier: ^0.7.0
+      version: 0.7.0
     '@statewalker/shared-baseclass':
       specifier: ^0.1.0
       version: 0.1.4
@@ -76,11 +76,11 @@ catalogs:
       specifier: ^0.2.0
       version: 0.2.4
     '@statewalker/shell.core':
-      specifier: ^0.5.0
-      version: 0.5.2
+      specifier: ^0.7.0
+      version: 0.7.0
     '@statewalker/webapp.browser':
-      specifier: ^0.5.0
-      version: 0.5.2
+      specifier: ^0.7.0
+      version: 0.7.0
     '@statewalker/webrun-files':
       specifier: ^0.10.0
       version: 0.10.5
@@ -88,11 +88,11 @@ catalogs:
       specifier: ^0.10.0
       version: 0.10.5
     '@statewalker/workspace.browser':
-      specifier: ^0.5.0
-      version: 0.5.2
+      specifier: ^0.7.0
+      version: 0.7.0
     '@statewalker/workspace.core':
-      specifier: ^0.5.0
-      version: 0.5.2
+      specifier: ^0.7.0
+      version: 0.7.0
     '@tanstack/react-query':
       specifier: ^5.104.1
       version: 5.104.1
@@ -211,16 +211,16 @@ importers:
         version: 0.21.0(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(tailwindcss@4.3.3)(zod@4.6.5)
       '@statewalker/ai-config.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.6.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/render.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/render.view.react':
         specifier: workspace:^
         version: link:../render.view.react
       '@statewalker/settings.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/shared-commands':
         specifier: 'catalog:'
         version: 0.2.4(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
@@ -238,7 +238,7 @@ importers:
         version: link:../ui.view.shadcn
       '@statewalker/workspace.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       lucide-react:
         specifier: 'catalog:'
         version: 1.52.0(@types/react@19.3.0)(react@19.3.0)
@@ -290,10 +290,10 @@ importers:
         version: 0.21.0(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(tailwindcss@4.3.3)(zod@4.6.5)
       '@statewalker/ai-local-models.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.6.1(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/render.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/shared-commands':
         specifier: 'catalog:'
         version: 0.2.4(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
@@ -308,7 +308,7 @@ importers:
         version: link:../ui.view.react
       '@statewalker/workspace.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       react-markdown:
         specifier: 'catalog:'
         version: 10.1.0(@types/react@19.3.0)(react@19.3.0)
@@ -354,13 +354,13 @@ importers:
         version: 0.21.0(zod@4.6.5)
       '@statewalker/explorer.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))
       '@statewalker/mime.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/render.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/render.view.react':
         specifier: workspace:^
         version: link:../render.view.react
@@ -378,7 +378,7 @@ importers:
         version: 0.2.4
       '@statewalker/shell.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/shell.view.react':
         specifier: workspace:^
         version: link:../shell.view.react
@@ -393,7 +393,7 @@ importers:
         version: 0.10.5
       '@statewalker/workspace.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       lucide-react:
         specifier: 'catalog:'
         version: 1.52.0(@types/react@19.3.0)(react@19.3.0)
@@ -439,7 +439,7 @@ importers:
         version: 0.4.2
       '@statewalker/mime.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/shared-commands':
         specifier: 'catalog:'
         version: 0.2.4(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
@@ -454,7 +454,7 @@ importers:
         version: link:../ui.view.react
       '@statewalker/workspace.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/workspace.view.react':
         specifier: workspace:^
         version: link:../workspace.view.react
@@ -491,10 +491,10 @@ importers:
         version: 0.21.0(zod@4.6.5)
       '@statewalker/mime.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/render.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/render.view.react':
         specifier: workspace:^
         version: link:../render.view.react
@@ -515,7 +515,7 @@ importers:
         version: link:../ui.view.react
       '@statewalker/workspace.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/workspace.view.react':
         specifier: workspace:^
         version: link:../workspace.view.react
@@ -558,10 +558,10 @@ importers:
         version: 0.21.0(zod@4.6.5)
       '@statewalker/mime.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/render.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/render.view.react':
         specifier: workspace:^
         version: link:../render.view.react
@@ -585,7 +585,7 @@ importers:
         version: link:../ui.view.shadcn
       '@statewalker/workspace.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/workspace.view.react':
         specifier: workspace:^
         version: link:../workspace.view.react
@@ -643,10 +643,10 @@ importers:
         version: 0.21.0(zod@4.6.5)
       '@statewalker/mime.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/render.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/render.view.react':
         specifier: workspace:^
         version: link:../render.view.react
@@ -667,7 +667,7 @@ importers:
         version: link:../ui.view.react
       '@statewalker/workspace.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/workspace.view.react':
         specifier: workspace:^
         version: link:../workspace.view.react
@@ -710,10 +710,10 @@ importers:
         version: 0.21.0(zod@4.6.5)
       '@statewalker/mime.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/render.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/render.view.react':
         specifier: workspace:^
         version: link:../render.view.react
@@ -734,7 +734,7 @@ importers:
         version: link:../ui.view.react
       '@statewalker/workspace.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/workspace.view.react':
         specifier: workspace:^
         version: link:../workspace.view.react
@@ -808,7 +808,7 @@ importers:
     dependencies:
       '@statewalker/settings.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/shared-commands':
         specifier: 'catalog:'
         version: 0.2.4(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
@@ -820,7 +820,7 @@ importers:
         version: 0.2.4
       '@statewalker/shell.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/ui.view.react':
         specifier: workspace:^
         version: link:../ui.view.react
@@ -829,7 +829,7 @@ importers:
         version: link:../ui.view.shadcn
       '@statewalker/workspace.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/workspace.view.react':
         specifier: workspace:^
         version: link:../workspace.view.react
@@ -872,7 +872,7 @@ importers:
     dependencies:
       '@statewalker/render.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/render.view.react':
         specifier: workspace:^
         version: link:../render.view.react
@@ -887,7 +887,7 @@ importers:
         version: 0.2.4
       '@statewalker/shell.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/ui.view.react':
         specifier: workspace:^
         version: link:../ui.view.react
@@ -896,7 +896,7 @@ importers:
         version: link:../ui.view.shadcn
       '@statewalker/workspace.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/workspace.view.react':
         specifier: workspace:^
         version: link:../workspace.view.react
@@ -954,10 +954,10 @@ importers:
         version: link:../ui.view.shadcn
       '@statewalker/workspace.browser':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/workspace.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@tanstack/react-query':
         specifier: 'catalog:'
         version: 5.104.1(react@19.3.0)
@@ -1067,7 +1067,7 @@ importers:
         version: 0.21.0(zod@4.6.5)
       '@statewalker/render.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/render.view.react':
         specifier: workspace:^
         version: link:../render.view.react
@@ -1082,10 +1082,10 @@ importers:
         version: link:../shell.view.react
       '@statewalker/webapp.browser':
         specifier: 'catalog:'
-        version: 0.5.2(@statewalker/webrun-files@0.10.5)(zod@4.6.5)
+        version: 0.7.0(@statewalker/webrun-files@0.10.5)(zod@4.6.5)
       '@statewalker/workspace.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       zod:
         specifier: 'catalog:'
         version: 4.6.5
@@ -1131,7 +1131,7 @@ importers:
         version: 0.2.4
       '@statewalker/shell.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/ui.view.react':
         specifier: workspace:^
         version: link:../ui.view.react
@@ -1140,10 +1140,10 @@ importers:
         version: link:../ui.view.shadcn
       '@statewalker/workspace.browser':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/workspace.core':
         specifier: 'catalog:'
-        version: 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        version: 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       lucide-react:
         specifier: 'catalog:'
         version: 1.52.0(@types/react@19.3.0)(react@19.3.0)
@@ -1178,32 +1178,14 @@ packages:
   '@adobe/css-tools@4.5.0':
     resolution: {integrity: sha512-6OzddxPio9UiWTCemp4N8cYLV2ZN1ncRnV1cVGtve7dhPOtRkleRyx32GQCYSwDYgaHU3USMm84tNsvKzRCa1Q==}
 
-  '@ai-sdk/anthropic@4.0.71':
-    resolution: {integrity: sha512-wiv3jhUH0RrvGzSolJMZfZ2cI9As45LhwYmcAoWvNivXjC7wzJ4W/Udq9/u7EGnGsT8lpmFKEKBrMXVeUO97Dg==}
-    engines: {node: '>=22'}
-    peerDependencies:
-      zod: ^3.25.76 || ^4.1.8
-
   '@ai-sdk/anthropic@4.0.74':
     resolution: {integrity: sha512-q/A7hCZSsCknmC1TtyNkBgNlT12hbKOWrgyb1UdPpIAO9sZcFS0nilZFIsW/ugVKG+hd6bU1r9NL1Ru33FDwZw==}
     engines: {node: '>=22'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
 
-  '@ai-sdk/gateway@4.0.103':
-    resolution: {integrity: sha512-nnGTUHzPRQ14jhv9CL4OQrzcRBIFTBMIPKGIi9Z9u/4GtwSRxa/nxUX6np2Iwp5phOzO0a0njj/j9Jolf5AEaA==}
-    engines: {node: '>=22'}
-    peerDependencies:
-      zod: ^3.25.76 || ^4.1.8
-
   '@ai-sdk/gateway@4.0.106':
     resolution: {integrity: sha512-NprSdFzyVnbEp2SDWtIgsCFIUHFCehOD9S6FQkF/dLrCmnke8w4SOK3KcmUUiEbwtVzlUF8prkaELp+ohcQaQw==}
-    engines: {node: '>=22'}
-    peerDependencies:
-      zod: ^3.25.76 || ^4.1.8
-
-  '@ai-sdk/google@4.0.87':
-    resolution: {integrity: sha512-s0tWc+QeSce7O2ZLm+VWSRQy16dGfqEcMIUxEWh+LFvXX3h0TLH8jxCQ2H1qhiBgTta+6A97eHPhBlRFu1xy+g==}
     engines: {node: '>=22'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
@@ -1216,12 +1198,6 @@ packages:
 
   '@ai-sdk/mcp@2.0.69':
     resolution: {integrity: sha512-DRgUmuESCM8KOcVzlFFVFv9GLu1kCqhdcQ2C1zz2vD0VQ/KKyek37geGPvFsV5tUJfywklh99zIKp4V1V3bhPg==}
-    engines: {node: '>=22'}
-    peerDependencies:
-      zod: ^3.25.76 || ^4.1.8
-
-  '@ai-sdk/openai@4.0.83':
-    resolution: {integrity: sha512-NgqZVWoya7hfmtLkWyIjX9THbyYMLfxFqpShdAmvMnkoT+R9AZbdULGan8+4BiBWIZ1aHiAsc90l3SL8QU/0+Q==}
     engines: {node: '>=22'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
@@ -2655,14 +2631,14 @@ packages:
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
 
-  '@statewalker/ai-agent-runtime.core@0.5.2':
-    resolution: {integrity: sha512-XYpn3oDk03R3tPhf6eFgcnORFjP0v1AJKKWdDm9gEJ4eS0hBIClvJGOm+CnwPAiveO1YabJZHnmiqxu3ghuUKA==}
+  '@statewalker/ai-agent-runtime.core@0.6.0':
+    resolution: {integrity: sha512-UY46locudoj4MeXWEZbKZX9EMeUxtOLFzFXNQkTppnh097mMeggtlLir22s0oHvm5bvmhv7bAdwd2IE9bCRc4w==}
 
   '@statewalker/ai-agent.core@0.4.3':
     resolution: {integrity: sha512-yXF7EzlQcX9FNq/LBhe7+ylM657oyMIC0mk8dNQauS+kw48yqvOr/cd9ZPqm+n+r9u0hcYpyleebZNaslOAV8Q==}
 
-  '@statewalker/ai-config.core@0.5.2':
-    resolution: {integrity: sha512-JBqXi08ANMeeEVaTtswR/P3BecpGWOisIE46BCWCvVuRgFqtcelUli2/DVupI0IORANZ7gH4NSz2MIAbr/XmCw==}
+  '@statewalker/ai-config.core@0.6.0':
+    resolution: {integrity: sha512-VcFk57N4hKP/Vl8EHbhM8VIr3g/0ylLv1JFbUc++AonVec+wm0s6282IVBmJiK4ktF72pWqSBgtSGiQT9C+tpg==}
 
   '@statewalker/ai-local-models.browser@0.4.3':
     resolution: {integrity: sha512-/xO9L8kcsG9PicU7lOffQLBeWBB7O0wDlOF++3e9fOh8wYmKbKHTfUfnxlu8s1kWfmJ7sCpP3me3PXkIpFuTpQ==}
@@ -2678,11 +2654,11 @@ packages:
       '@mlc-ai/web-llm':
         optional: true
 
-  '@statewalker/ai-local-models.core@0.5.2':
-    resolution: {integrity: sha512-LcYgeFwiYK9uuj6vg0VaRiXdvpSzDue92Bh5wYEAx6yDvuG2FZL+AZthKZ/aNhATtKW5KazFVcPxvqJ4f5R9EQ==}
+  '@statewalker/ai-local-models.core@0.6.1':
+    resolution: {integrity: sha512-ETxK4nH/2JE02NaZXfzc49HANBZRJ++PZK+JshEaQZV4JxJtg4s9/lPPrs/uamVUg9KM+NHJs21mZgAiIya32A==}
 
-  '@statewalker/explorer.core@0.5.2':
-    resolution: {integrity: sha512-KmSvCS4yeWMx9z/IQXiTe02GAVFG22PO3GsNN+9ydf9/I/Mv7o7fxJhY75mNyPjodV0KIdVC6faina/MthA6cA==}
+  '@statewalker/explorer.core@0.7.0':
+    resolution: {integrity: sha512-vstqfsLUn1Mpy1I5UBRQyR4hEh/CHGdNyba7+Zl7/uPtNBcGjZjcVqa7CBsRk9654MtRHr7WOTqlcJAsto4J1w==}
 
   '@statewalker/fsm@0.38.2':
     resolution: {integrity: sha512-W346Eifd7eyUWjVGBqY3YGMOg3ad1MlLuWor4LofFh/koBq2IYJOGQSZ4ahYkGOeYD/iOgm8NLkFc6yVilLNdQ==}
@@ -2690,14 +2666,14 @@ packages:
   '@statewalker/inline.core@0.4.2':
     resolution: {integrity: sha512-OmxlVb40zfmzkNQhWqckqZyGtMMebqVEoca12GI70KcHwcAnYtJxD3Jtp1kK0mZbDJEpR4JCeWQe7x57t+lcDQ==}
 
-  '@statewalker/mime.core@0.5.2':
-    resolution: {integrity: sha512-A8MQLkUH46DVJKJzyAh+KVEaa11i/x/ZXpLOEVdXesH5fnqBpHFyKnut31Y82XFbuy3dAg4i7tsI+rEtTFlAZQ==}
+  '@statewalker/mime.core@0.7.0':
+    resolution: {integrity: sha512-NgamB8Ivl6UouXvUgv5L/aygmzpNXD178s1CTwFm+uyqAIDB6K4YI6+LEYvyXEJwYPtN1uVqKUwttGO4kP1aOg==}
 
-  '@statewalker/render.core@0.5.2':
-    resolution: {integrity: sha512-Cpo6xlOQW1qW01FHzjvZgB0q3ScKq5emNy1eXgTYyBvCOJNVuVIfoqyp8g/Q0r/udvdJ/knaDr4gsFgD0YZkEA==}
+  '@statewalker/render.core@0.7.0':
+    resolution: {integrity: sha512-xXALmnXHOoT+6bOdi+qPTNFF3AoRoxYCeIvg3w5k+Tns67KWX3YFWQDkd0wYEoL56swqenDWGnm9Tv4h26iE+A==}
 
-  '@statewalker/settings.core@0.5.2':
-    resolution: {integrity: sha512-gtlCGEfvdaD4jr7WoOtuG7W1mbz7yYVbTfhs7v7Or/e0nJ9Gj9qbrt59yoglyqFesEVBtKYzO7OcfhNdxc/PTQ==}
+  '@statewalker/settings.core@0.7.0':
+    resolution: {integrity: sha512-0CV0d323FPG70e8FaOn47rdfs7mYV/FoAW4SUHE8SzgpS/Ge+Ih/9plqUhcNuqkYKCKLwshtpAoOJAhyxzC6PA==}
 
   '@statewalker/shared-adapters@0.1.3':
     resolution: {integrity: sha512-hmF316wz5IwYcbHpKW42jwYJzssFZPcHgUz+jBOduYSPv+10TC/kA3NlnDjp2rSL+Woq0AJu57AdOJZDW6L6Pg==}
@@ -2720,20 +2696,17 @@ packages:
   '@statewalker/shared-slots@0.2.4':
     resolution: {integrity: sha512-1U88fXm+kZHY84JKMY0+027EE9CvfBbIX7FryjWHWms98iNuuxIkT1JRilc/UzWQJyXOW3iSa0noneWHppWbCA==}
 
-  '@statewalker/shell.core@0.5.2':
-    resolution: {integrity: sha512-kop0tMRBJrK7rSy7z7H4gIJvLM0EzEe3x4+4/bPdUCb90XHgtjmoimsFCaYRz0idf55Rmo/juoXp5c/r1SzYlw==}
+  '@statewalker/shell.core@0.7.0':
+    resolution: {integrity: sha512-G8gpqPc69u7BeoY9wS4DWIaTjtVgySxztgjJv09d/Jsj0spXAzE8BU5nj5gdWtW25sJvLIaAj/b8nbypItczCg==}
 
-  '@statewalker/webapp.browser@0.5.2':
-    resolution: {integrity: sha512-LOhDsxrDXNU8o5KHYGJCH7cbCp/EijG+87p8N3Qpcf/AG9rl+8BZdBjLqf0XtlbDGlKFAEMOTdEbt/+XD0BYFQ==}
+  '@statewalker/webapp.browser@0.7.0':
+    resolution: {integrity: sha512-wf5Fw0zLnG/o0WenUyh4J3n5MJHUfsZqpOZ6WwTWzcxbKSmcJ0IASG8BypiOQkUXbemuBnZrfvU2N+2ZmfvWWg==}
 
-  '@statewalker/webapp.core@0.5.2':
-    resolution: {integrity: sha512-fQP04AGI/FoXxWlzq62kmEo24m4x6FjXubSjwzs12BujZc+XQNB9STmUdYik3YbvqvVpctWB+kCJJj9hmgBRvA==}
+  '@statewalker/webapp.core@0.7.0':
+    resolution: {integrity: sha512-GQOluuxhHVCVjkHgunWZuKfdKhngokCocX8Tf2qDcPM9/7qB/eVuao2HgxQNfu/FUtAH92p0De4uxCZGf02sGg==}
 
-  '@statewalker/webrun-builder@0.2.1':
-    resolution: {integrity: sha512-SoLZ88zccPEQ0KqZkIS/OZIiUJbDFsDeZzzIYTu/ymRJKKHfZPOLdVsr2iHGxn7NJWJTs0yA8CRKrZNhx1ImcQ==}
-
-  '@statewalker/webrun-dataflow@0.1.3':
-    resolution: {integrity: sha512-SrvSkwk8PQIPm3bgg3ZoXc1c5Abce1Wdjo5+qVCO4hRC2SpypOk8TsgqdPA4ydEs+mqrFWphZcNt96fv5UtfLg==}
+  '@statewalker/webrun-builder@0.4.2':
+    resolution: {integrity: sha512-ikrHLSTIqxCA1HwGf2CrH6lcmaCqMtLJIpAmJDzGPXiQ0mDxU1a2zhJaDjYFyp/mm7OYHl13Bsa81CtYYBi7SA==}
 
   '@statewalker/webrun-files-browser@0.10.4':
     resolution: {integrity: sha512-pDJMi8hH7loBb9rGxRaSib+gC4tEEWIgOvxAeNI54yyKyX5Z/G4oxUB99EkgcpGjmPfp76EX0a8Tkxju+Uegtw==}
@@ -2772,11 +2745,11 @@ packages:
   '@statewalker/webrun-streams@0.2.3':
     resolution: {integrity: sha512-v4+32VDLjt8HzAhjgd7K3bgiasQosU7FooXhLaTU2dQzYyNZ6NbNMOI/24SL0bdmTHkSU3bxktASn0hO3sCwng==}
 
-  '@statewalker/workspace.browser@0.5.2':
-    resolution: {integrity: sha512-XptQrv+znRU+z7rhGQOFG66qgH+iHxVshAMA6eJ0E5oYJJqCU15RjXxhpI4LBBYZr5562hNg54QFp4GMzUFgWw==}
+  '@statewalker/workspace.browser@0.7.0':
+    resolution: {integrity: sha512-KGxPwxkAlH8zMzHbW+RU/EFHbUOLGDSRz9uq8/1DyfqzVGs9WMrXI21RrdNUGrYqZP+zJbWWuu9qsyIZ/5Dhkw==}
 
-  '@statewalker/workspace.core@0.5.2':
-    resolution: {integrity: sha512-JmIPvymskFfSGod7IglhnJhBC2Yo1ozmz4CcQ6LM8Psf0/jzBWSzLqBYRzI9IfYvc77Z7GNR+6AqQ27DO4eZAA==}
+  '@statewalker/workspace.core@0.7.0':
+    resolution: {integrity: sha512-gBpOqHkYyrry/kmGcWNvL/6dXfyQ2SV32vvikrdtMDZCh4dQkmQ8HpAakamnhssFM3thr2TSf2b3w1yQ0Aeo+g==}
 
   '@tanstack/query-core@5.104.1':
     resolution: {integrity: sha512-TiRghcrGkUTE+M4JBxvpPSpBhxvIzQairw+cksrHYGr+2uwC77yW1SY9nYxnYRYOppvucf8rEg6b5byoz4rTpw==}
@@ -3201,12 +3174,6 @@ packages:
     resolution: {integrity: sha512-oJlA3XiRm7Cyk6qFD2Jn8ak9B7jSy0qy00ADO3+8dpT0LSjFihQYv4C02LFCSYJV3Q37xYwwRy5m+IpIiUzqWw==}
     engines: {node: '>=0.4.0'}
     hasBin: true
-
-  ai@7.0.127:
-    resolution: {integrity: sha512-JNsNPk4ZvRGEJuqdVo2lYFkm7uAuf3p/RwKFWn1Wh/+IK3U1RyFWw2GXoFnhzqNfxEuj7XJB4WpIUhl1sHToWg==}
-    engines: {node: '>=22'}
-    peerDependencies:
-      zod: ^3.25.76 || ^4.1.8
 
   ai@7.0.130:
     resolution: {integrity: sha512-QkBkCogl46jXUg0SrSsdqQlOI2ZVMCjfnbBQS8t3gE21U/SO17oNMVFyjmcC9z20wOoYUA+2O2vsso0maoS7dw==}
@@ -4695,23 +4662,10 @@ snapshots:
 
   '@adobe/css-tools@4.5.0': {}
 
-  '@ai-sdk/anthropic@4.0.71(zod@4.6.5)':
-    dependencies:
-      '@ai-sdk/provider': 4.0.21
-      '@ai-sdk/provider-utils': 5.0.53(zod@4.6.5)
-      zod: 4.6.5
-
   '@ai-sdk/anthropic@4.0.74(zod@4.6.5)':
     dependencies:
       '@ai-sdk/provider': 4.0.24
       '@ai-sdk/provider-utils': 5.0.56(zod@4.6.5)
-      zod: 4.6.5
-
-  '@ai-sdk/gateway@4.0.103(zod@4.6.5)':
-    dependencies:
-      '@ai-sdk/provider': 4.0.21
-      '@ai-sdk/provider-utils': 5.0.53(zod@4.6.5)
-      '@vercel/oidc': 3.2.0
       zod: 4.6.5
 
   '@ai-sdk/gateway@4.0.106(zod@4.6.5)':
@@ -4719,12 +4673,6 @@ snapshots:
       '@ai-sdk/provider': 4.0.24
       '@ai-sdk/provider-utils': 5.0.56(zod@4.6.5)
       '@vercel/oidc': 3.2.0
-      zod: 4.6.5
-
-  '@ai-sdk/google@4.0.87(zod@4.6.5)':
-    dependencies:
-      '@ai-sdk/provider': 4.0.21
-      '@ai-sdk/provider-utils': 5.0.53(zod@4.6.5)
       zod: 4.6.5
 
   '@ai-sdk/google@4.0.90(zod@4.6.5)':
@@ -4739,12 +4687,6 @@ snapshots:
       '@ai-sdk/provider-utils': 5.0.56(zod@4.6.5)
       cross-spawn: 7.0.6
       pkce-challenge: 5.0.1
-      zod: 4.6.5
-
-  '@ai-sdk/openai@4.0.83(zod@4.6.5)':
-    dependencies:
-      '@ai-sdk/provider': 4.0.21
-      '@ai-sdk/provider-utils': 5.0.53(zod@4.6.5)
       zod: 4.6.5
 
   '@ai-sdk/openai@4.0.86(zod@4.6.5)':
@@ -6101,16 +6043,16 @@ snapshots:
 
   '@standard-schema/spec@1.1.0': {}
 
-  '@statewalker/ai-agent-runtime.core@0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)':
+  '@statewalker/ai-agent-runtime.core@0.6.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)':
     dependencies:
-      '@ai-sdk/provider': 4.0.21
+      '@ai-sdk/provider': 4.0.24
       '@statewalker/ai-agent.core': 0.4.3
       '@statewalker/shared-baseclass': 0.1.4
       '@statewalker/shared-commands': 0.2.4(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/shared-registry': 0.1.3
       '@statewalker/shared-slots': 0.2.4
       '@statewalker/webrun-files': 0.10.5
-      '@statewalker/workspace.core': 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+      '@statewalker/workspace.core': 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
     transitivePeerDependencies:
       - '@cfworker/json-schema'
       - '@types/json-schema'
@@ -6130,7 +6072,7 @@ snapshots:
       '@ai-sdk/google': 4.0.90(zod@4.6.5)
       '@ai-sdk/mcp': 2.0.69(zod@4.6.5)
       '@ai-sdk/openai': 4.0.86(zod@4.6.5)
-      '@ai-sdk/provider': 4.0.21
+      '@ai-sdk/provider': 4.0.24
       '@ai-sdk/provider-utils': 5.0.53(zod@4.6.5)
       '@modelcontextprotocol/sdk': 1.32.1(zod@4.6.5)
       '@statewalker/fsm': 0.38.2
@@ -6144,18 +6086,18 @@ snapshots:
       - '@cfworker/json-schema'
       - supports-color
 
-  '@statewalker/ai-config.core@0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)':
+  '@statewalker/ai-config.core@0.6.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)':
     dependencies:
-      '@ai-sdk/anthropic': 4.0.71(zod@4.6.5)
-      '@ai-sdk/google': 4.0.87(zod@4.6.5)
-      '@ai-sdk/openai': 4.0.83(zod@4.6.5)
-      '@ai-sdk/provider': 4.0.21
+      '@ai-sdk/anthropic': 4.0.74(zod@4.6.5)
+      '@ai-sdk/google': 4.0.90(zod@4.6.5)
+      '@ai-sdk/openai': 4.0.86(zod@4.6.5)
+      '@ai-sdk/provider': 4.0.24
       '@json-render/core': 0.21.0(zod@4.6.5)
       '@statewalker/shared-commands': 0.2.4(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/shared-registry': 0.1.3
       '@statewalker/webrun-files': 0.10.5
-      '@statewalker/workspace.core': 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
-      ai: 7.0.127(zod@4.6.5)
+      '@statewalker/workspace.core': 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+      ai: 7.0.130(zod@4.6.5)
     transitivePeerDependencies:
       - '@types/json-schema'
       - '@valibot/to-json-schema'
@@ -6169,27 +6111,27 @@ snapshots:
 
   '@statewalker/ai-local-models.browser@0.4.3':
     dependencies:
-      '@ai-sdk/provider': 4.0.21
+      '@ai-sdk/provider': 4.0.24
       '@statewalker/ai-agent.core': 0.4.3
       '@statewalker/webrun-files': 0.10.5
     transitivePeerDependencies:
       - '@cfworker/json-schema'
       - supports-color
 
-  '@statewalker/ai-local-models.core@0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)':
+  '@statewalker/ai-local-models.core@0.6.1(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)':
     dependencies:
-      '@ai-sdk/provider': 4.0.21
+      '@ai-sdk/provider': 4.0.24
       '@json-render/core': 0.21.0(zod@4.6.5)
-      '@statewalker/ai-agent-runtime.core': 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+      '@statewalker/ai-agent-runtime.core': 0.6.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/ai-agent.core': 0.4.3
       '@statewalker/ai-local-models.browser': 0.4.3
-      '@statewalker/settings.core': 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+      '@statewalker/settings.core': 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/shared-baseclass': 0.1.4
       '@statewalker/shared-commands': 0.2.4(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/shared-registry': 0.1.3
       '@statewalker/shared-slots': 0.2.4
       '@statewalker/webrun-files': 0.10.5
-      '@statewalker/workspace.core': 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+      '@statewalker/workspace.core': 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
     transitivePeerDependencies:
       - '@browser-ai/transformers-js'
       - '@cfworker/json-schema'
@@ -6206,17 +6148,17 @@ snapshots:
       - zod
       - zod-to-json-schema
 
-  '@statewalker/explorer.core@0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))':
+  '@statewalker/explorer.core@0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))':
     dependencies:
       '@json-render/core': 0.21.0(zod@4.6.5)
-      '@statewalker/mime.core': 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+      '@statewalker/mime.core': 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/shared-baseclass': 0.1.4
       '@statewalker/shared-commands': 0.2.4(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/shared-registry': 0.1.3
       '@statewalker/shared-slots': 0.2.4
-      '@statewalker/shell.core': 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+      '@statewalker/shell.core': 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/webrun-files': 0.10.5
-      '@statewalker/workspace.core': 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+      '@statewalker/workspace.core': 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       zod: 4.6.5
     transitivePeerDependencies:
       - '@types/json-schema'
@@ -6235,16 +6177,16 @@ snapshots:
       '@statewalker/shared-registry': 0.1.3
       '@statewalker/shared-slots': 0.2.4
 
-  '@statewalker/mime.core@0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)':
+  '@statewalker/mime.core@0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)':
     dependencies:
-      '@statewalker/render.core': 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+      '@statewalker/render.core': 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/shared-commands': 0.2.4(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/shared-registry': 0.1.3
       '@statewalker/shared-slots': 0.2.4
-      '@statewalker/shell.core': 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+      '@statewalker/shell.core': 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/webrun-files': 0.10.5
       '@statewalker/webrun-files-mem': 0.10.5
-      '@statewalker/workspace.core': 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+      '@statewalker/workspace.core': 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
     transitivePeerDependencies:
       - '@types/json-schema'
       - '@valibot/to-json-schema'
@@ -6256,13 +6198,13 @@ snapshots:
       - zod
       - zod-to-json-schema
 
-  '@statewalker/render.core@0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)':
+  '@statewalker/render.core@0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)':
     dependencies:
       '@statewalker/shared-commands': 0.2.4(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/shared-registry': 0.1.3
       '@statewalker/shared-slots': 0.2.4
       '@statewalker/webrun-files': 0.10.5
-      '@statewalker/workspace.core': 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+      '@statewalker/workspace.core': 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
     transitivePeerDependencies:
       - '@types/json-schema'
       - '@valibot/to-json-schema'
@@ -6274,13 +6216,13 @@ snapshots:
       - zod
       - zod-to-json-schema
 
-  '@statewalker/settings.core@0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)':
+  '@statewalker/settings.core@0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)':
     dependencies:
       '@statewalker/shared-baseclass': 0.1.4
       '@statewalker/shared-commands': 0.2.4(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/shared-registry': 0.1.3
       '@statewalker/shared-slots': 0.2.4
-      '@statewalker/workspace.core': 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+      '@statewalker/workspace.core': 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
     transitivePeerDependencies:
       - '@types/json-schema'
       - '@valibot/to-json-schema'
@@ -6321,13 +6263,13 @@ snapshots:
 
   '@statewalker/shared-slots@0.2.4': {}
 
-  '@statewalker/shell.core@0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)':
+  '@statewalker/shell.core@0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)':
     dependencies:
-      '@statewalker/render.core': 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+      '@statewalker/render.core': 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/shared-commands': 0.2.4(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/shared-registry': 0.1.3
       '@statewalker/shared-slots': 0.2.4
-      '@statewalker/workspace.core': 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+      '@statewalker/workspace.core': 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       dockview-core: 8.4.0
     transitivePeerDependencies:
       - '@types/json-schema'
@@ -6340,14 +6282,14 @@ snapshots:
       - zod
       - zod-to-json-schema
 
-  '@statewalker/webapp.browser@0.5.2(@statewalker/webrun-files@0.10.5)(zod@4.6.5)':
+  '@statewalker/webapp.browser@0.7.0(@statewalker/webrun-files@0.10.5)(zod@4.6.5)':
     dependencies:
-      '@statewalker/render.core': 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+      '@statewalker/render.core': 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/shared-commands': 0.2.4(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
-      '@statewalker/shell.core': 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
-      '@statewalker/webapp.core': 0.5.2(zod@4.6.5)
+      '@statewalker/shell.core': 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+      '@statewalker/webapp.core': 0.7.0(zod@4.6.5)
       '@statewalker/webrun-site-host': 0.2.5(@statewalker/webrun-files@0.10.5)
-      '@statewalker/workspace.core': 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+      '@statewalker/workspace.core': 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
     transitivePeerDependencies:
       - '@statewalker/webrun-files'
       - '@types/json-schema'
@@ -6360,13 +6302,13 @@ snapshots:
       - zod
       - zod-to-json-schema
 
-  '@statewalker/webapp.core@0.5.2(zod@4.6.5)':
+  '@statewalker/webapp.core@0.7.0(zod@4.6.5)':
     dependencies:
       '@statewalker/webrun-files': 0.10.5
       '@statewalker/webrun-modules': 0.3.6
       '@statewalker/webrun-site-builder': 0.2.2(@statewalker/webrun-files@0.10.5)
       '@statewalker/webrun-site-host': 0.2.5(@statewalker/webrun-files@0.10.5)
-      '@statewalker/workspace.core': 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+      '@statewalker/workspace.core': 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
     transitivePeerDependencies:
       - '@types/json-schema'
       - '@valibot/to-json-schema'
@@ -6378,12 +6320,9 @@ snapshots:
       - zod
       - zod-to-json-schema
 
-  '@statewalker/webrun-builder@0.2.1':
+  '@statewalker/webrun-builder@0.4.2':
     dependencies:
-      '@statewalker/webrun-dataflow': 0.1.3
       '@statewalker/webrun-files': 0.10.5
-
-  '@statewalker/webrun-dataflow@0.1.3': {}
 
   '@statewalker/webrun-files-browser@0.10.4':
     dependencies:
@@ -6442,14 +6381,14 @@ snapshots:
 
   '@statewalker/webrun-streams@0.2.3': {}
 
-  '@statewalker/workspace.browser@0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)':
+  '@statewalker/workspace.browser@0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)':
     dependencies:
       '@statewalker/shared-baseclass': 0.1.4
       '@statewalker/shared-commands': 0.2.4(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/shared-registry': 0.1.3
       '@statewalker/webrun-files': 0.10.5
       '@statewalker/webrun-files-browser': 0.10.4
-      '@statewalker/workspace.core': 0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+      '@statewalker/workspace.core': 0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       idb-keyval: 6.3.0
     transitivePeerDependencies:
       - '@types/json-schema'
@@ -6462,14 +6401,13 @@ snapshots:
       - zod
       - zod-to-json-schema
 
-  '@statewalker/workspace.core@0.5.2(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)':
+  '@statewalker/workspace.core@0.7.0(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)':
     dependencies:
       '@statewalker/shared-adapters': 0.1.3
       '@statewalker/shared-baseclass': 0.1.4
       '@statewalker/shared-commands': 0.2.4(@types/json-schema@7.0.15)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@statewalker/shared-logger': 0.1.5
-      '@statewalker/webrun-builder': 0.2.1
-      '@statewalker/webrun-dataflow': 0.1.3
+      '@statewalker/webrun-builder': 0.4.2
       '@statewalker/webrun-files': 0.10.5
       '@statewalker/webrun-files-composite': 0.10.5
     transitivePeerDependencies:
@@ -6759,13 +6697,6 @@ snapshots:
       acorn: 8.19.0
 
   acorn@8.19.0: {}
-
-  ai@7.0.127(zod@4.6.5):
-    dependencies:
-      '@ai-sdk/gateway': 4.0.103(zod@4.6.5)
-      '@ai-sdk/provider': 4.0.21
-      '@ai-sdk/provider-utils': 5.0.53(zod@4.6.5)
-      zod: 4.6.5
 
   ai@7.0.130(zod@4.6.5):
     dependencies:
