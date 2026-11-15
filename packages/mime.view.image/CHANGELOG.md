@@ -1,5 +1,13 @@
 # @statewalker/mime.view.image
 
+## 0.3.1
+
+### Patch Changes
+
+- Release of the changes since the last published version:
+  
+  - @statewalker/shell.view.react ^0.3.0 -> ^0.3.1
+
 ## 0.3.0
 
 ### Minor Changes
