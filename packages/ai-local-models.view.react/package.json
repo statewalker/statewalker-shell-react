@@ -1,6 +1,6 @@
 {
   "name": "@statewalker/ai-local-models.view.react",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": false,
   "type": "module",
   "description": "Renderer fragment for the Local Models settings tab. Pairs with @statewalker/ai-local-models.core (logic).",
